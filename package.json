@@ -1,0 +1,23 @@
+{
+  "name": "beawinner",
+  "version": "1.0.0",
+  "description": "Coursework for WebSystems",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VKalushev/BeAWinner.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VKalushev/BeAWinner/issues"
+  },
+  "homepage": "https://github.com/VKalushev/BeAWinner#readme",
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongodb": "^6.4.0"
+  }
+}
