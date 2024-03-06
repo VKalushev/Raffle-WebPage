@@ -12,7 +12,7 @@ const { MongoClient } = require("mongodb");
 const uri = "mongodb+srv://beyondReality1:bestpassword@main.ef79t9g.mongodb.net/?retryWrites=true&w=majority&appName=main";
 
 var options = {
-    index: "myWebPage.html"
+    index: "index.html"
   };
 
 var dir = path.join(__dirname, '../frontend');
