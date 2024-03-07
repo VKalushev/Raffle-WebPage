@@ -21,7 +21,17 @@ header {
     align-items: center;
     justify-content: space-between;
     background-color: #565656;
-    
+}
+
+.footer {
+    box-shadow: 0px 3px 2px 4px #ccc;
+    padding: 0% 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #565656;
+    color: orange;
+    font-size: 14px;
 }
 
 header nav ul {
@@ -45,6 +55,12 @@ header nav ul {
     text-decoration: none;
     text-transform: uppercase;
     color: orange;
+}
+
+#login-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
 }
 
 .nav-link:hover {
@@ -90,10 +106,10 @@ header nav ul {
     position: relative;
     border-radius: 10px;
     color: white;
-    background-image: url('../images/test2.jpg'); /* Specify the path to your image */
-    background-size: cover; /* Adjust the size of the background image */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-image: url('../images/test2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .raffle header h3 {
@@ -144,14 +160,6 @@ header nav ul {
 
 .raffle-text::after {
     content: none;
-}
-
-.raffle-text {
-    border: 2px solid black; /* Adjust the width and color as needed */
-    padding: 0.5%; /* Adjust the padding as needed */
-    border-radius: 10px; /* Adjust the border radius for a rounded border */
-    margin-left: 1.5%;
-    margin-right: 1.5%;
 }
 
 .raffle footer {
