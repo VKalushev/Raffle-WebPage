@@ -1,0 +1,42 @@
+.login-section {
+    margin: 50px auto; /* Example margin */
+    width: 300px; /* Example width */
+    padding: 20px; /* Example padding */
+    background-color: white; /* Example background color */
+    border-radius: 10px; /* Example border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Example box shadow */
+}
+
+.login-section h2 {
+    text-align: center; /* Example text alignment */
+    margin-bottom: 20px; /* Example margin */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Example margin */
+}
+
+label {
+    display: block; /* Example display property */
+    margin-bottom: 5px; /* Example margin */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Example width */
+    padding: 10px; /* Example padding */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px; /* Example border radius */
+    box-sizing: border-box; /* Example box sizing */
+}
+
+.login-form {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9100;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
