@@ -1,55 +1,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
-body {
-    background-image: url('../images/test2.jpg'); /* Specify the path to your image */
-    background-size: cover; /* Adjust the size of the background image */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
-}
+body,
 ul {
     margin: 0;
     padding: 0;
     font-family: "Lato", sans-serif;
-    /* background-color: rgb(211, 38, 38); */
+    background-color: rgb(238, 222, 222);
 }
 
+.logo-container {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* vertical-align: middle; */
+    /* margin: 0% 15% -7.2% 0% ; */
+  }
+  
+
 header {
-    box-shadow: 0px 3px 8px -4px #ccc;
-    padding: 20px 40px;
+    box-shadow: 0px 3px 2px 4px #ccc;
+    padding: 1%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: #565656;
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #565656;
+    color: orange;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Center text horizontally */
+    padding: 10px 0; /* Adjust padding as needed */
+}
+
 
 header nav ul {
     display: flex;
     list-style: none;
     align-items: center;
+    background-color: #565656;
 }
 
-.logo-container img {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 7px;
+.nav-item {
+    margin: 0% 3%;
+    font-size: 125%;
 }
 
 .login-nav-item * {
     display: inline-block;
     vertical-align: middle;
-}
-
-.login-btn {
-    margin-left: 10px;
-}
-
-.nav-item {
-    margin: 0 10px;
+    /* font-size: 125%; */
 }
 
 .nav-link {
     text-decoration: none;
     text-transform: uppercase;
-    color: #565656;
+    color: orange;
+}
+
+#login-link {
+    text-decoration: none;
+    text-transform: none;
+    color: white;
+    font-size: larger;
 }
 
 .nav-link:hover {
@@ -59,49 +80,53 @@ header nav ul {
 
 .btn {
     background: #ff9100;
-    color: white;
-    border-radius: 14px;
-    padding: 12px 16px;
+    border-radius: 20px;
+    padding: 8%;
+    margin-left: -15%;
+    width: 120px;
     border: none;
     text-transform: uppercase;
-    box-shadow: 0px 3px 8px -4px #ccc;
 }
 
 .welcome-section {
-    background: #ff9100;
+    background: #ffa228;
     color: white;
     text-align: center;
-    padding: 60px 120px 90px 120px;
+    padding: 2% 2% 2% 2%;
 }
 
 .welcome-section h1 {
-    font-size: 50px;
+    font-size: 4vw;
 }
 
 .raffles {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 50px;
+    /* margin: 5%; */
 }
 
 .raffle {
-    margin: 20px;
+    margin: 2%;
     box-shadow: 0px 2px 4px 0px #00000024;
-    border-radius: 12px;
+    border-radius: 2%;
     background: #f8f8f8; 
 }
 
 .raffle header {
     position: relative;
-    border-radius: 12px;
-    background: #44a9f8; /* Add background color */
+    border-radius: 10px;
+    color: white;
+    background-image: url('/assets/reward_images/test2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .raffle header h3 {
     text-align: center;
-    padding: 60px 60px;
-    font-size: 21px;
+    padding: 2% 2%;
+    font-size: 2vw;
 }
 
 .raffle header span {
@@ -109,15 +134,15 @@ header nav ul {
     border-radius: 6px;
     text-transform: uppercase;
     color: white;
-    padding: 8px 12px;
+    padding: 1% 1.5%;
     position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 12px;
+    top: 3%;
+    left: 1%;
+    font-size: 90%;
 }
 
 .raffle-details {
-    padding: 20px;
+    padding: 2%;
 }
 
 .raffle-details {
@@ -126,36 +151,41 @@ header nav ul {
     align-items: center;
     text-align: center;
     justify-content: center;
+
 }
 
 .raffle-details-info {
     display: flex;
     align-items: center;
-    margin: 8px;
+    margin: 1%;
 }
 
 .raffle-details::after {
     content: "";
     display: block;
     width: 100%;
-    margin: 10px auto;
-    height: 1px;
+    margin: 2% auto;
+    height: 0.1vw;
     background: rgb(214, 212, 212);
+}
+
+.raffle-text::after {
+    content: none;
 }
 
 .raffle footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 2%;
 }
 
 .raffle-price {
-    font-size: 24px;
+    font-size: 2vw;
     color: #fc4c50;
 }
 
 .raffle-action .btn {
     font-weight: bold;
-    padding: 16px 16px;
+    padding: 2% 2%;
 }
