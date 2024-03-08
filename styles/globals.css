@@ -68,8 +68,9 @@ header nav ul {
 
 #login-link {
     text-decoration: none;
-    text-transform: uppercase;
+    text-transform: none;
     color: white;
+    font-size: larger;
 }
 
 .nav-link:hover {
@@ -79,9 +80,8 @@ header nav ul {
 
 .btn {
     background: #ff9100;
-    color: white;
-    border-radius: 30px;
-    padding: 10%;
+    border-radius: 20px;
+    padding: 8%;
     margin-right: 10%;
     width: 120px;
     border: none;

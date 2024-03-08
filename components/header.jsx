@@ -39,7 +39,7 @@ const Header = () => {
         </nav>
 
         <div className="login-nav-item">
-            <button className="btn login-btn">
+            <button className="btn">
                 <a id="login-link" href="/login">Login</a>
             </button>
         </div>
