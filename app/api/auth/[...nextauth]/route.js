@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 import User from '@models/user';
 import { connectToDB } from '@utils/database';
@@ -9,7 +10,19 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    })
+    }),
+    CredentialsProvider({
+      async authorize(credentials) {
+        try {
+          await connectToDB();
+          
+          return "Error";
+        } catch (error) {
+          console.error('Error authenticating user:', error);
+          return null;
+        }
+      },
+    }),
   ],
   callbacks: {
     async session({ session }) {

@@ -2,22 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
-    const isUserLoggedIn = true;
-    const { data: session } = useSession();
-
-    const [providers, setProviders] = useState(null);
-    const [toggleDropdown, setToggleDropdown] = useState(false);
-
-    useEffect(() => {
-        (async () => {
-          const res = await getProviders();
-          setProviders(res);
-        })();
-      }, []);
+  const { data: session } = useSession();
+  const router = useRouter();
+  
+  const handleSignInClick = () => {
+    router.push(`/login`);
+  };
+  const isUserLoggedIn = false;
 
   return (
     
@@ -48,19 +43,14 @@ const Nav = () => {
                 </div>
                 ) : (
                 <>
-                    {providers &&
-                    Object.values(providers).map((provider) => (
-                        <button
+                    <button
                         type='button'
-                        key={provider.name}
-                        onClick={() => {
-                            signIn(provider.id);
-                        }}
+                        onClick={handleSignInClick}
                         className='black_btn'
                         >
                         Sign in
-                        </button>
-                    ))}
+                    </button>
+                    
                 </>
                 )}
       </div>
