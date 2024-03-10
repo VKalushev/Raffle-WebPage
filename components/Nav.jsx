@@ -27,7 +27,6 @@ const Nav = () => {
                 <Image src="/assets/logos/logo5.png" alt="Logo" width={100} height={100} className="object-contain"/>
             </Link>
 
-
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>
                 {isUserLoggedIn ? (
@@ -36,7 +35,7 @@ const Nav = () => {
                         Sign Out
                     </button>
 
-                    <Link href='/profile'>
+                    <Link href='/login'>
                     <Image
                         // src={session?.user.image}
                         src="/assets/logos/logo5.png"

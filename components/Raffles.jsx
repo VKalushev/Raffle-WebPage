@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 
-import PromptCard from "./PromptCard";
+import RaffleCard from "./RaffleCard";
 
 const PromptCardList = ({ data }) => {
   return (
     <div className='mt-16 prompt_layout'>
       {data.map((raffle) => (
-        <PromptCard
+        <RaffleCard
           key={raffle._id}
           raffle={raffle}
           handleTagClick={handleTagClick}
@@ -35,7 +35,7 @@ const Feed = () => {
   
     return (
       <section className='raffles mb-10'>
-        <PromptCard></PromptCard>
+        <RaffleCard></RaffleCard>
         {/* <PromptCardList data={allRaffles} handleTagClick={handleTagClick} /> */}
       </section>
     );

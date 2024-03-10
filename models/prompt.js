@@ -5,7 +5,11 @@ const PromptSchema = new Schema({
     type: String,
     required: [true, 'A custom id should be entered']
   },
-  prize: {
+  entry_price: {
+    type: Number,
+    default: 0,
+  },
+  winning_prize: {
     type: String,
     required: [true, 'Setting a prize is required.'],
   },
