@@ -3,16 +3,22 @@
 import Link from "next/link";
 import Image from "next/image";
 import {signOut, useSession} from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Nav = () => {
+  const pathname = usePathname()
+  let isLoginPage = false;
+
+  if(pathname === '/login'){
+    isLoginPage = true;
+  }
+
   const { data: session } = useSession();
   const router = useRouter();
   
   const handleSignInClick = () => {
     router.push(`/login`);
   };
-  const isUserLoggedIn = false;
 
   return (
     
@@ -24,7 +30,7 @@ const Nav = () => {
 
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>
-                {isUserLoggedIn ? (
+                {session?.user ? (
                 <div className='flex gap-3 md:gap-5'>
                     <button type='button' onClick={signOut} className='outline_btn'>
                         Sign Out
@@ -32,8 +38,7 @@ const Nav = () => {
 
                     <Link href='/login'>
                     <Image
-                        // src={session?.user.image}
-                        src="/assets/logos/logo5.png"
+                        src={session?.user.image}
                         width={37}
                         height={37}
                         className='rounded-full'
@@ -43,13 +48,17 @@ const Nav = () => {
                 </div>
                 ) : (
                 <>
+                  {isLoginPage ? (
+                    <div></div>
+                  ) : (
                     <button
                         type='button'
                         onClick={handleSignInClick}
-                        className='black_btn'
-                        >
+                        className='black_btn'>
                         Sign in
                     </button>
+                  )}
+                    
                     
                 </>
                 )}

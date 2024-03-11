@@ -12,16 +12,23 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      async authorize(credentials) {
-        try {
-          await connectToDB();
-          
-          return "Error";
-        } catch (error) {
-          console.error('Error authenticating user:', error);
-          return null;
-        }
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" }
       },
+      async authorize(credentials, req) {
+        const user = await getUserFromDatabase(credentials.email, credentials.password);
+  
+        if (user) {
+          // Any object returned will be saved in `user` property of the JWT
+          return user
+        } else {
+          // If you return null then an error will be displayed advising the user to check their details.
+          return null
+  
+          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        }
+      },   
     }),
   ],
   callbacks: {
@@ -35,7 +42,7 @@ const handler = NextAuth({
     async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
-
+        
         // check if user already exists
         const userExists = await User.findOne({ email: profile.email });
 
