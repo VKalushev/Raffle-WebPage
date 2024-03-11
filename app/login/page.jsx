@@ -7,6 +7,7 @@ import Link from "next/link";
 const LoginPage = () => {
   const [providers, setProviders] = useState(null);
   const router = useRouter();
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -16,22 +17,34 @@ const LoginPage = () => {
     fetchProviders();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
   const handleCredentialsLogin = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
 
     try {
-      await signIn('credentials', {
+      const response = await signIn('credentials', {
         email,
         password,
-        callbackUrl: '/', // Redirect URL after successful login
+        redirect: false, // Prevent automatic redirection
       });
-      router.push('/');
+      
+      console.log(response)
+      
+      if (!response.ok) {
+        setError('Invalid email or password');
+      } else {
+        router.push('/'); // Redirect to the home page upon successful login
+      }
     } catch (error) {
-      console.error('Error logging in with credentials:', error);
+      console.error('Error logging in:', error);
+      setError('An error occurred during login');
     }
   };
+
 
   const handleGoogleLogin = async () => {
     try {
