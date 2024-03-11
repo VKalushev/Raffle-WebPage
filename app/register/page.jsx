@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password: '',
     confirmPassword: '',
   });
@@ -21,7 +22,7 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Perform validation
     if (formData.password !== formData.confirmPassword) {
@@ -29,9 +30,32 @@ const RegisterPage = () => {
       return;
     }
     // Your registration logic here
+    try { 
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json", // Set the Content-Type header
+        },
+        body: JSON.stringify({
+            email: formData.email,
+            username: formData.username,
+            password: formData.password,
+        }),
+    });
+    
+    console.log(response)
+    
+        if (response.ok) {
+            router.push("/login");
+        } else {
+          const {message} = await response.json()
+          setError(message)
+        }
+    } catch (error) {
+        console.log(error);
+    }
     
     // Once registered, you may want to redirect the user to a different page
-    router.push('/login'); // Redirect to the login page after successful registration
   };
 
   return (
@@ -41,6 +65,10 @@ const RegisterPage = () => {
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" required />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+          <input type="username" id="username" name="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" required />
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
