@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
+import { useRouter, redirect } from 'next/navigation';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,11 @@ const RegisterPage = () => {
   });
   const [error, setError] = useState('');
   const router = useRouter();
+  const { data: session } = useSession();
+
+  if(session){
+    redirect('/')
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;

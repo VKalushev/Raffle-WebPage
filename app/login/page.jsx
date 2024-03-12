@@ -1,16 +1,19 @@
 'use client'
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter, redirect } from "next/navigation";
 import Link from "next/link";
 
 const LoginPage = () => {
-  const [providers, setProviders] = useState(null);
+  const { data: session } = useSession();
   const router = useRouter();
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  if(session){
+    redirect('/')
+  }
 
 
   const handleCredentialsLogin = async (e) => {
@@ -25,8 +28,6 @@ const LoginPage = () => {
       
       if (!response.ok) {
         setError('Invalid email or password');
-      } else {
-        router.push('/'); // Redirect to the home page upon successful login
       }
     } catch (error) {
       
@@ -34,7 +35,6 @@ const LoginPage = () => {
       setError('An error occurred during login');
     }
   };
-
 
   const handleGoogleLogin = async () => {
     try {
@@ -63,10 +63,11 @@ const LoginPage = () => {
             </Link>
           </div>
         </div>
+        {error && <p className="text-red-500">{error}</p>}
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Login with Credentials</button>
       </form>
       <button onClick={handleGoogleLogin} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Login with Google</button>
-      <button onClick={() => signIn()} className="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Continue as Guest</button>
+      {/* <button onClick={handleGuestLogin} className="mt-4 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Continue as Guest</button> */}
     </div>
   );
 };

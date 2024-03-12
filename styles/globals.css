@@ -168,8 +168,23 @@
   @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
 }
 
+/* PromptCard Component */
+.create_raffle {
+  @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+}
+
+/* PromptCard Component */
+.new_raffle_button {
+  @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black opacity-50 bg-slate-50 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-full md:h-[360px];
+}
+
+
 .reward-box {
   @apply rounded-lg border border-black bg-gray-400 text-xs p-1 ml-1 mt-10 bg-clip-padding  backdrop-filter md:w-[360px] w-full h-fit;
+}
+
+.input-reward-box {
+  @apply rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 bg-clip-padding  backdrop-filter  h-fit;
 }
 
 .flex-center {

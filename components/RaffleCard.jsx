@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
@@ -53,10 +52,30 @@ const NumberInput = () => {
 const RaffleCard = ({  }) => {
     const { data: session } = useSession();
 
-    const [selectedOption, setSelectedOption] = useState('option1');
+    const [selectedOption, setSelectedOption] = useState('random_raffle');
 
     const handleOptionChange = (e) => {
         setSelectedOption(e.target.value);
+    };
+
+    const handleEnterRaffle = async (e) => {
+      e.preventDefault();
+  
+      try {
+        const response = await signIn('credentials', {
+          email,
+          password,
+          redirect: false, // Prevent automatic redirection
+        });
+        
+        if (!response.ok) {
+          setError('Invalid email or password');
+        }
+      } catch (error) {
+        
+        console.error('Error logging in:', error);
+        setError('An error occurred during login');
+      }
     };
 
     return (
@@ -107,7 +126,7 @@ const RaffleCard = ({  }) => {
                 )}
 
                 <div className="flex-center m-1">
-                    <button className="raffle_btn">Enter Raffle</button>
+                    <button className="raffle_btn" onClick={handleEnterRaffle}>Enter Raffle</button>
                 </div>
                 
             </footer>

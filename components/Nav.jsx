@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import {signOut, useSession} from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 
 const Nav = () => {

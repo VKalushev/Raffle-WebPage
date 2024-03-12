@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
-const PromptSchema = new Schema({
+const RaffleSchema = new Schema({
   custom_id: {
     type: String,
     required: [true, 'A custom id should be entered']
@@ -14,7 +14,7 @@ const PromptSchema = new Schema({
     required: [true, 'Setting a prize is required.'],
   },
   draw_date: {
-    type: String,
+    type: Date,
     required: [true, 'Draw date is required.'],
   },
   tickets_sold:{
@@ -22,11 +22,11 @@ const PromptSchema = new Schema({
     default: 0,
   },
   participants:{
-    type: Array,
+    type: [String],
     default: [],
   }
 });
 
-const Prompt = models.Prompt || model('Prompt', PromptSchema);
+const Raffle = models.Raffle || model('Raffle', RaffleSchema);
 
-export default Prompt;
+export default Raffle;
