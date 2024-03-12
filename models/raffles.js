@@ -1,10 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
 const RaffleSchema = new Schema({
-  custom_id: {
-    type: String,
-    required: [true, 'A custom id should be entered']
-  },
   entry_price: {
     type: Number,
     default: 0,

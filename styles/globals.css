@@ -133,7 +133,7 @@
 }
 
 .prompt_layout {
-  @apply space-y-6 py-8 sm:columns-2 sm:gap-6 xl:columns-3;
+  @apply space-y-6 py-8  sm:columns-2 sm:gap-6 xl:columns-3;
 }
 
 /* Feed Component */
@@ -165,15 +165,13 @@
 
 /* PromptCard Component */
 .prompt_card {
-  @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+  @apply flex-1 break-inside-avoid rounded-lg border border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[460px] w-full h-fit;
 }
 
-/* PromptCard Component */
 .create_raffle {
   @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
 }
 
-/* PromptCard Component */
 .new_raffle_button {
   @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black opacity-50 bg-slate-50 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-full md:h-[360px];
 }

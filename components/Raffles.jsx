@@ -5,10 +5,10 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import RadioButton from "./RadioButton";
 
-const PromptCardList = ({ allRaffles, handleEnterButton }) => {
+const PromptRaffleList = ({ data, handleEnterButton }) => {
   return (
-    <div className='mt-16 prompt_layout'>
-      {allRaffles.map((raffle) => (
+    <div className='prompt_layout'>
+      {data && data.length > 0 && data.map((raffle) => (
         <RaffleCard
           key={raffle._id}
           raffle={raffle}
@@ -26,7 +26,7 @@ const Raffles = () => {
   const { data: session } = useSession();
   const [reward, setReward] = useState('');
   const [time, setTime] = useState('');
-  const [ticketPrice, setTicketPrice] = useState('');
+  const [ticketPrice, setTicketPrice] = useState(0);
 
   // console.log(session.user)
   const fetchRaffles = async () => {
@@ -57,10 +57,10 @@ const Raffles = () => {
     console.log(response)
     
         if (response.ok) {
-            router.push("/login");
+          setCreatingRaffle(false);
         } else {
           const {message} = await response.json()
-          setError(message)
+          console.error(message);
         }
     } catch (error) {
         console.log(error);
@@ -76,12 +76,12 @@ const Raffles = () => {
     setCreatingRaffle(false);
     setReward('')
     setTime('')
-    setTicketPrice('')
+    setTicketPrice(0)
   };
 
   return (
     <section className='raffles m-5'>
-      {session?.user.role === 'Admin' ? (
+      {session?.user.role === 'Admin' && (
         <div>
           {!creatingRaffle ? (
             <div className="new_raffle_button flex items-center justify-center text-9xl">
@@ -94,7 +94,8 @@ const Raffles = () => {
             <div>
             {/* If the admin is creating a new raffle, render the new raffle card template */}
             {creatingRaffle && (
-              <div className="prompt_card">
+              // <div className="prompt_card">
+              <form onSubmit={handleCreateRaffle} className="prompt_card">
               <header className="raffle-header" >
                   <input className="input-reward-box " placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
                   <h3 className="p-14 text-center text-xl text-black">
@@ -144,21 +145,25 @@ const Raffles = () => {
                       </div>
                   <div className="flex-center m-1">
                       <button className="raffle_btn" onClick={handleCancelCreateRaffle}>Cancel</button>
-                      <button className="raffle_btn" onClick={handleCreateRaffle}>Confirm</button>
+                      <button className="raffle_btn" type="submit">Confirm</button>
                   </div>
                   
               </footer>
-          </div>
+              </form>
+            /* </div> */
             )}
           </div>
           )}
             
         </div>
-      ): (
-        <div>No user</div>
       )}
-       <div className="mb-20"><RaffleCard ></RaffleCard></div>
-      {/* <PromptCardList data={allRaffles} handleTagClick={handleEnterButton} /> */}
+       {/* <div className="mb-20"><RaffleCard ></RaffleCard></div> */}
+       { allRaffles.length > 0 &&(
+        <div>
+        <PromptRaffleList data={allRaffles} handleEnterButton={ () => {}} />
+        </div>
+       )}
+      
     </section>
   );
 };
