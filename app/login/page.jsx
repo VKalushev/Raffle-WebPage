@@ -8,19 +8,10 @@ const LoginPage = () => {
   const [providers, setProviders] = useState(null);
   const router = useRouter();
   const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const res = await getProviders();
-      setProviders(res);
-    };
-    fetchProviders();
-  }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
 
   const handleCredentialsLogin = async (e) => {
     e.preventDefault();
@@ -32,14 +23,13 @@ const LoginPage = () => {
         redirect: false, // Prevent automatic redirection
       });
       
-      console.log(response)
-      
       if (!response.ok) {
         setError('Invalid email or password');
       } else {
         router.push('/'); // Redirect to the home page upon successful login
       }
     } catch (error) {
+      
       console.error('Error logging in:', error);
       setError('An error occurred during login');
     }
@@ -61,11 +51,11 @@ const LoginPage = () => {
       <form onSubmit={handleCredentialsLogin} className="mb-4">
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-          <input type="email" id="email" name="email" className="mt-1 p-2 w-full border rounded-md" required />
+          <input type="email" id="email" name="email" className="mt-1 p-2 w-full border rounded-md" required onChange={(e) => setEmail(e.target.value)} />
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" id="password" name="password" className="mt-1 p-2 w-full border rounded-md" required />
+          <input type="password" id="password" name="password" className="mt-1 p-2 w-full border rounded-md" required onChange={(e) => setPassword(e.target.value)} />
           <div className="flex items-center">
             <p className="text-sm text-gray-600 mr-2">Don't have an account yet?</p>
             <Link href="/register" className="text-blue-500 hover:underline">

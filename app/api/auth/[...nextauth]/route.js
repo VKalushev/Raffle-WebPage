@@ -2,8 +2,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import GoogleUser from '@models/google_user';
-import CredentialsUser from '@models/credentials_user';
+import User from '@models/user';
 import { connectToDB, getUserFromDatabase } from '@utils/database';
 
 const handler = NextAuth({
@@ -14,15 +13,14 @@ const handler = NextAuth({
     }),
     CredentialsProvider({
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-        const { username, password } = credentials;
+        const { email, password } = credentials;
         try {
           // Check if user exists in the database
-          const user = await CredentialsUser.findOne({ username });
-          
+          const user = await User.findOne({ email });
           if (user) {
             // If user exists, check if the password matches
             if (user.password === password) {
@@ -47,7 +45,7 @@ const handler = NextAuth({
   callbacks: {
     async session({ session }) {
       // store the user id from MongoDB to session
-      const sessionUser = await GoogleUser.findOne({ email: session.user.email });
+      const sessionUser = await User.findOne({ email: session.user.email });
       session.user.id = sessionUser._id.toString();
 
       return session;
@@ -55,13 +53,12 @@ const handler = NextAuth({
     async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
-        
-        // check if user already exists
-        const userExists = await GoogleUser.findOne({ email: profile.email });
+
+        const userExists = await User.findOne({ email: user.email });
 
         // if not, create a new document and save user in MongoDB
-        if (!userExists) {
-          await GoogleUser.create({
+        if (!userExists && credentials === undefined) {
+          await User.create({
             email: profile.email,
             username: profile.name.replace(" ", "").toLowerCase(),
             image: profile.picture,

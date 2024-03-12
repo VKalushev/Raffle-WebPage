@@ -1,6 +1,6 @@
 import { Schema, model, models } from 'mongoose';
 
-const GoogleUserSchema = new Schema({
+const UserSchema = new Schema({
   email: {
     type: String,
     unique: [true, 'Email already exists!'],
@@ -11,11 +11,16 @@ const GoogleUserSchema = new Schema({
     required: [true, 'Username is required!'],
     match: [/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, "Username invalid, it should contain 8-20 alphanumeric letters and be unique!"]
   },
+  password: {
+    type: String,
+    default: ''
+  },
   image: {
     type: String,
+    default: ''
   }
 });
 
-const User = models.User || model("User", GoogleUserSchema);
+const User = models.User || model("User", UserSchema);
 
 export default User;
