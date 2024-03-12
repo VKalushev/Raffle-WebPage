@@ -4,94 +4,76 @@ import { useState, useEffect} from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
-
-const NumberInput = () => {
-    const [value, setValue] = useState(0);
-  
-    const handleDecrease = () => {
-        if (value > 0) {
-          setValue(value - 1);
-        }
-      };
-    
-      const handleIncrease = () => {
-        setValue(value + 1);
-      };
-    
-      const handleChange = (e) => {
-        const newValue = parseInt(e.target.value);
-        if (!isNaN(newValue)) {
-          setValue(newValue);
-        }
-      };
-  
-    return (
-      <div className="flex items-center space-x-0.5">
-        <button
-          onClick={handleDecrease}
-          className="px-1 py-0 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
-        >
-          -
-        </button>
-        <input
-          type="text"
-          value={value}
-          onChange={handleChange}
-          className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none"
-        />
-        <button
-          onClick={handleIncrease}
-          className="px-1 py-0 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
-        >
-          +
-        </button>
-      </div>
-    );
-  };
-
-  const Countdown = ({ drawDate }) => {
-    const [countdown, setCountdown] = useState('');
-  
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        const now = new Date();
-        const endDate = new Date(drawDate);
-        const timeDifference = endDate.getTime() - now.getTime();
-  
-        if (timeDifference > 0) {
-          const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-  
-          setCountdown(`${days} days : ${hours} hours : ${minutes} mins : ${seconds} secs`);
-        } else {
-          setCountdown('Expired');
-          clearInterval(intervalId);
-        }
-      }, 1000);
-  
-      return () => clearInterval(intervalId);
-    }, []);
-  
-    return <span>{countdown}</span>;
-  };
+import NumberInput from "./NumberInputs";
+import Countdown from "./Countdown";
   
   const RaffleCard = ({ raffle }) => {
     const { data: session } = useSession();
-  
+    const [ticketCount, setTicketCount] = useState(0);
     const [selectedOption, setSelectedOption] = useState('random_raffle');
-    console.log(raffle);
+    const [message, setMessage] = useState(null);
+    const [luckyNumber, setLuckyNumber] = useState("");
+
     const handleOptionChange = (e) => {
       setSelectedOption(e.target.value);
     };
-  
-    const handleEnterRaffle = async (e) => {
+    const handleInputChange = (e) => {
+      setLuckyNumber(e.target.value);
+      console.log('Lucky Number:',luckyNumber)
+    };
+
+    const handleTicketChange = (newValue) => {
+      setTicketCount(newValue);
+      console.log('Ticket Count:',ticketCount)
+    };
+
+    const handleEnterRaffleButton  = async (e) => {
       e.preventDefault();
-      try {
-        // Handle entering raffle
-      } catch (error) {
-        console.error('Error entering raffle:', error);
+      console.log(selectedOption)
+      console.log('Test')
+      if(selectedOption === 'random_raffle'){
+        try { 
+          console.log('Test 2')
+          const response = await fetch("/api/buy_tickets", {
+            method: "POST",
+            body: JSON.stringify({
+            raffleId: raffle._id,
+            user: session.user,
+            amountOfTickets: ticketCount,
+            }),
+          });
+
+          if (response.ok) {
+            const {message} = await response.json()
+            setMessage(message);
+          } else {
+            const {message} = await response.json()
+            setMessage(message);
+          }
+        } catch (error) {
+            console.log(error);
+        }
+      } else {
+        try { 
+          const response = await fetch("/api/buy_tickets/lucky_ticket", {
+            method: "POST",
+            body: JSON.stringify({
+              raffleId: raffle._id,
+              user: time,
+              luckyNumber: luckyNumber,
+            }),
+          });  
+
+          if (response.ok) {
+            const {message} = await response.json()
+            setMessage(message);
+          } else {
+            const {message} = await response.json()
+            setMessage(message);
+          }
+        } catch (error) {
+            console.log(error);
+        }
       }
     };
   
@@ -133,19 +115,24 @@ const NumberInput = () => {
           {selectedOption === 'random_raffle' ? (
             <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
               <span>Enter amount of Tickets:</span>
-              <NumberInput />
+              <NumberInput value={ticketCount} onChange={handleTicketChange} />
             </div>
           ) : (
             <div className="flex-center gap-2 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
               <span>Enter lucky Number:</span>
-              <input className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none" />
+              <input value={luckyNumber} onChange={handleInputChange} className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none" />
             </div>
           )}
   
           <div className="flex-center m-1">
-            <button className="raffle_btn" onClick={handleEnterRaffle}>
+            <button className="raffle_btn" onClick={handleEnterRaffleButton}>
               Enter Raffle
             </button>
+            {message && (
+              <p className={response.ok ? "text-green-600" : "text-red-600"}>
+              {message}
+              </p>
+            )}
           </div>
         </footer>
       </div>

@@ -5,14 +5,13 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import RadioButton from "./RadioButton";
 
-const PromptRaffleList = ({ data, handleEnterButton }) => {
+const PromptRaffleList = ({ data}) => {
   return (
     <div className='prompt_layout'>
       {data && data.length > 0 && data.map((raffle) => (
         <RaffleCard
           key={raffle._id}
           raffle={raffle}
-          handleEnterButton={handleEnterButton}
         />
       ))}
     </div>
@@ -39,6 +38,7 @@ const Raffles = () => {
   useEffect(() => {
     fetchRaffles();
   }, []);
+
   
   const handleCreateRaffle = async (e) => {
     // Set the state to true to indicate that the user is creating a new raffle
@@ -80,7 +80,7 @@ const Raffles = () => {
   };
 
   return (
-    <section className='raffles m-5'>
+    <section className='m-12'>
       {session?.user.role === 'Admin' && (
         <div>
           {!creatingRaffle ? (
@@ -95,7 +95,7 @@ const Raffles = () => {
             {/* If the admin is creating a new raffle, render the new raffle card template */}
             {creatingRaffle && (
               // <div className="prompt_card">
-              <form onSubmit={handleCreateRaffle} className="prompt_card">
+              <form onSubmit={handleCreateRaffle} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">
               <header className="raffle-header" >
                   <input className="input-reward-box " placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
                   <h3 className="p-14 text-center text-xl text-black">
@@ -160,7 +160,7 @@ const Raffles = () => {
        {/* <div className="mb-20"><RaffleCard ></RaffleCard></div> */}
        { allRaffles.length > 0 &&(
         <div>
-        <PromptRaffleList data={allRaffles} handleEnterButton={ () => {}} />
+        <PromptRaffleList data={allRaffles}/>
         </div>
        )}
       
