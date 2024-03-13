@@ -29,7 +29,6 @@ const Raffles = () => {
 
   const currentDateTime = new Date().toISOString().split("T")[0] + "T" + new Date().toTimeString().split(" ")[0];
 
-  // console.log(session.user)
   const fetchRaffles = async () => {
     const response = await fetch("/api/raffles");
     const data = await response.json();
@@ -43,7 +42,6 @@ const Raffles = () => {
 
   
   const handleCreateRaffle = async (e) => {
-    // Set the state to true to indicate that the user is creating a new raffle
     e.preventDefault();
 
     try { 
@@ -72,7 +70,6 @@ const Raffles = () => {
   }
   
   const handleCancelCreateRaffle = () => {
-    // Set the state to false to cancel the creation of a new raffle
     setCreatingRaffle(false);
     setReward('')
     setTime('')
@@ -94,12 +91,18 @@ const Raffles = () => {
             <div>
             {/* If the admin is creating a new raffle, render the new raffle card template */}
             {creatingRaffle && (
-              // <div className="prompt_card">
               <form onSubmit={handleCreateRaffle} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">
               <header className="raffle-header" >
                   <input className="input-reward-box " placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
                   <h3 className="p-14 text-center text-xl text-black">
-                  <input type="datetime-local" placeholder="Select Time" required min={currentDateTime} onChange={(e) => setTime(e.target.value)}/>
+                  <input
+                    type="datetime-local"
+                    placeholder="Select Time"
+                    required
+                    min={currentDateTime.slice(0, -3)}
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                  />
                   </h3>
               </header>
   

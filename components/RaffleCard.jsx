@@ -15,12 +15,20 @@ import Countdown from "./Countdown";
     const [luckyNumber, setLuckyNumber] = useState('');
     const [countDownText, setcountDownText] = useState('');
     const [isExpired, setIsExpired] = useState(false);
+    const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
+    const [participantsCount, setParticipantsCount] = useState(raffle.participants);
+    const router = useRouter();
 
     useEffect(() => {
       if (countDownText === "Expired") {
         setIsExpired(true);
       }
     }, [countDownText]);
+
+    useEffect(() => {
+      setTicketsCount(raffle.tickets.length);
+      setParticipantsCount(raffle.participants);
+    }, [raffle]);
 
     const handleOptionChange = (e) => {
       setSelectedOption(e.target.value);
@@ -32,6 +40,37 @@ import Countdown from "./Countdown";
 
     const handleTicketChange = (newValue) => {
       setTicketCount(newValue);
+    };
+    
+    const handleEdit = () => {
+      router.push(`/raffle/${raffle._id}/edit`)
+    }
+
+    const handleDelete = async (e) => {
+      
+      if (window.confirm("Are you sure you want to delete this item?")) {
+        try {
+          const response = await fetch(`/api/raffles/${raffle._id}`, {
+            method: "DELETE",
+            body: JSON.stringify({
+            raffleId: raffle._id,
+            }),
+          });
+
+          tickets = await response.json();
+          if (tickets.length > 0){
+            try {
+              
+            } catch (error) {
+              
+            }
+          }
+
+        } catch (error) {
+          console.log(error)
+        }
+        
+      }
     };
 
     const handleEnterRaffleButton  = async (e) => {
@@ -54,7 +93,7 @@ import Countdown from "./Countdown";
       }
 
       try {
-        const response = await fetch(`/api/user/${userId}/add_tickets`, {
+        const response = await fetch(`/api/user/${userId}/tickets`, {
           method: "PATCH",
           body: JSON.stringify(body),
         });
@@ -62,7 +101,7 @@ import Countdown from "./Countdown";
         if (response.ok) {
           const tickets = await response.json()
           try {
-            const raffle_response = await fetch(`/api/raffles/${raffle._id}/add_tickets`, {
+            const raffle_response = await fetch(`/api/raffles/${raffle._id}`, {
               method: "PATCH",
               body: JSON.stringify({
               raffleId: raffle._id,
@@ -72,7 +111,8 @@ import Countdown from "./Countdown";
             });
             
             if (raffle_response.ok) {
-              setMessage('Tickets are bought succesfully');
+              const { message, response_raffle } = await raffle_response.json();
+              setMessage(`${tickets.length} tickets were bought succesfully`);
             } else {
               setMessage('There was a problem with buying the tickets')
             }
@@ -89,31 +129,24 @@ import Countdown from "./Countdown";
     return (
       <div className="prompt_card">
         <header className="raffle-header">
-          <span className="reward-box">Price: {raffle.winning_prize}</span>
+          <div className="flex">
+            <span className="reward-box">Price: {raffle.winning_prize}</span>
+
+            {session?.user.role === "Admin" && (
+              <div className='flex gap'>
+                <button className='reward-box' onClick={handleEdit}>Edit</button>
+                <button className='reward-box' onClick={handleDelete}> Delete</button>
+              </div>
+            )}
+          </div>
           <h3 className="p-14 text-center text-xl">
           <Countdown drawDate={raffle.draw_date} onStatusChange={setcountDownText} />
-        </h3>
-        {session?.user.role === "Admin" && (
-        <div className='mt-5 flex-center gap-4 border-t border-gray-100 pt-3'>
-          <p
-            className='font-inter text-sm green_gradient cursor-pointer'
-            onClick={handleEdit}
-          >
-            Edit
-          </p>
-          <p
-            className='font-inter text-sm orange_gradient cursor-pointer'
-            onClick={handleDelete}
-          >
-            Delete
-          </p>
-        </div>
-      )}
+          </h3>
         </header>
   
         <div className="text-sm text-center border-b-2 border-b-black ml-5 mr-5 p-2">
-          <span className="p-2">Tickets: {raffle.tickets.length}</span>
-          <span className="p-2">Participants: {raffle.participants}</span>
+          <span className="p-2">Tickets: {ticketsCount}</span>
+          <span className="p-2">Participants: {participantsCount}</span>
         </div>
         <footer className="">
           <div className="text-red-600 text-2xl border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
@@ -159,7 +192,7 @@ import Countdown from "./Countdown";
           </div>
           <div className="flex-center">
             {message && (
-              <p className={message === 'Tickets are bought succesfully' ? "text-green-600" : "text-red-600"}>
+              <p className={message === 'There was a problem with buying the tickets' ? "text-red-600" : "text-green-600"}>
               {message}
               </p>
             )}
