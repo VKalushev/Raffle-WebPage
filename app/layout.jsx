@@ -1,5 +1,6 @@
-import Footer from '@components/footer';
-import Header from '@components/header';
+import Footer from '@components/Footer';
+import Nav from '@components/Nav';
+import Provider from '@components/Provider';
 import '@styles/globals.css';
 // import { Children } from 'react';
 
@@ -12,13 +13,18 @@ export const metadata = {
 const RootLayout = ({children}) => {
   return (
     <html lang="en">
-        <body className='main'>
-            <Header></Header>
-            <main className='app'>
-                {/* {Children} */}
-                {children}
-            </main>
-            <Footer></Footer>
+        <body>
+          <Provider>
+          <div className='main'>
+            <div className='gradient'/>
+          </div>
+
+          <main className='app'>
+            <Nav/>
+              {children}
+            {/* <Footer/> */}
+          </main>
+          </Provider>
         </body>
     </html>
   )

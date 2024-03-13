@@ -1,191 +1,202 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-body,
-ul {
-    margin: 0;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
+*/
+
+.main {
+  width: 100vw;
+  min-height: 100vh;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  padding: 120px 24px 160px 24px;
+  pointer-events: none;
+}
+
+.main:before {
+  background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #fafafa 100%);
+  position: absolute;
+  content: "";
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+.main:after {
+  content: "";
+  background-image: url("/assets/reward_images/grid.svg");
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  opacity: 0.4;
+  filter: invert(1);
+}
+
+.raffle-header {
+  position: relative;
+  border-radius: 7px;
+  color: white;
+  background-image: url("/assets/reward_images/money.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.gradient {
+  height: fit-content;
+  z-index: 3;
+  width: 100%;
+  max-width: 640px;
+  background-image: radial-gradient(
+      at 27% 37%,
+      hsla(215, 98%, 61%, 1) 0px,
+      transparent 0%
+    ),
+    radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%),
+    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
+    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
+    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  filter: blur(100px) saturate(150%);
+  top: 80px;
+  opacity: 0.15;
+}
+
+@media screen and (max-width: 640px) {
+  .main {
     padding: 0;
-    font-family: "Lato", sans-serif;
-    background-color: rgb(238, 222, 222);
-}
-
-.logo-container {
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* vertical-align: middle; */
-    /* margin: 0% 15% -7.2% 0% ; */
   }
-  
-
-header {
-    box-shadow: 0px 3px 2px 4px #ccc;
-    padding: 1%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #565656;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #565656;
-    color: orange;
-    font-size: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center; /* Center text horizontally */
-    padding: 10px 0; /* Adjust padding as needed */
+/* Tailwind Styles */
+
+.app {
+  @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
+}
+
+.black_btn {
+  @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+}
+
+.outline_btn {
+  @apply rounded-full border border-black bg-transparent py-1.5 px-5 text-black transition-all hover:bg-black hover:text-white text-center text-sm font-inter flex items-center justify-center;
+}
+
+.raffle_btn {
+  @apply rounded-full border border-red-600 m-2 bg-red-600 p-2  text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
+}
+
+.head_text {
+  @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-6xl;
+}
+
+.orange_gradient {
+  @apply bg-gradient-to-r from-amber-500 via-orange-600 to-yellow-500 bg-clip-text text-transparent;
+}
+
+.green_gradient {
+  @apply bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent;
+}
+
+.blue_gradient {
+  @apply bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent;
+}
+
+.desc {
+  @apply mt-5 text-lg text-gray-600 sm:text-xl max-w-2xl;
+}
+
+.search_input {
+  @apply block w-full rounded-md border border-gray-200 bg-white py-2.5 font-satoshi pl-5 pr-12 text-sm shadow-lg font-medium focus:border-black focus:outline-none focus:ring-0;
+}
+
+.copy_btn {
+  @apply w-7 h-7 rounded-full bg-white/10 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur flex justify-center items-center cursor-pointer;
+}
+
+.glassmorphism {
+  @apply rounded-xl border border-gray-200 bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur p-5;
+}
+
+.prompt_layout {
+  @apply space-y-6 py-8  sm:columns-2 sm:gap-6 xl:columns-3;
+}
+
+/* Feed Component */
+.feed {
+  @apply mt-16 mx-auto w-full max-w-xl flex justify-center items-center flex-col gap-2;
+}
+
+/* Form Component */
+.form_textarea {
+  @apply w-full flex rounded-lg h-[200px] mt-2 p-3 text-sm text-gray-500 outline-0;
+}
+
+.form_input {
+  @apply w-full flex rounded-lg mt-2 p-3 text-sm text-gray-500 outline-0;
+}
+
+/* Nav Component */
+.logo_text {
+  @apply max-sm:hidden font-satoshi font-semibold text-lg text-black tracking-wide;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-3 w-full p-5 rounded-lg bg-white min-w-[210px] flex flex-col gap-2 justify-end items-end;
+}
+
+.dropdown_link {
+  @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
+}
+
+/* PromptCard Component */
+.prompt_card {
+  @apply break-inside-avoid rounded-lg border border-black bg-green-300  md:w-auto w-full h-fit;
+}
+
+.create_raffle {
+  @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
+}
+
+.new_raffle_button {
+  @apply rounded-lg border mt-10 border-black opacity-50 md:w-auto w-full h-full md:h-auto;
 }
 
 
-header nav ul {
-    display: flex;
-    list-style: none;
-    align-items: center;
-    background-color: #565656;
+.reward-box {
+  @apply rounded-lg border border-black bg-gray-400 text-xs p-1 ml-1 mt-10 bg-clip-padding  backdrop-filter md:w-[360px] w-full h-fit;
 }
 
-.nav-item {
-    margin: 0% 3%;
-    font-size: 125%;
+.input-reward-box {
+  @apply rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 bg-clip-padding  backdrop-filter  h-fit;
 }
 
-.login-nav-item * {
-    display: inline-block;
-    vertical-align: middle;
-    /* font-size: 125%; */
+.flex-center {
+  @apply flex justify-center items-center;
 }
 
-.nav-link {
-    text-decoration: none;
-    text-transform: uppercase;
-    color: orange;
+.flex-start {
+  @apply flex justify-start items-start;
 }
 
-#login-link {
-    text-decoration: none;
-    text-transform: none;
-    color: white;
-    font-size: larger;
+.flex-end {
+  @apply flex justify-end items-center;
 }
 
-.nav-link:hover {
-    color: #ff9100;
-    cursor: pointer;
-}
-
-.btn {
-    background: #ff9100;
-    border-radius: 20px;
-    padding: 8%;
-    margin-left: -15%;
-    width: 120px;
-    border: none;
-    text-transform: uppercase;
-}
-
-.welcome-section {
-    background: #ffa228;
-    color: white;
-    text-align: center;
-    padding: 2% 2% 2% 2%;
-}
-
-.welcome-section h1 {
-    font-size: 4vw;
-}
-
-.raffles {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* margin: 5%; */
-}
-
-.raffle {
-    margin: 2%;
-    box-shadow: 0px 2px 4px 0px #00000024;
-    border-radius: 2%;
-    background: #f8f8f8; 
-}
-
-.raffle header {
-    position: relative;
-    border-radius: 10px;
-    color: white;
-    background-image: url('/assets/reward_images/test2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.raffle header h3 {
-    text-align: center;
-    padding: 2% 2%;
-    font-size: 2vw;
-}
-
-.raffle header span {
-    background: #676781;
-    border-radius: 6px;
-    text-transform: uppercase;
-    color: white;
-    padding: 1% 1.5%;
-    position: absolute;
-    top: 3%;
-    left: 1%;
-    font-size: 90%;
-}
-
-.raffle-details {
-    padding: 2%;
-}
-
-.raffle-details {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-
-}
-
-.raffle-details-info {
-    display: flex;
-    align-items: center;
-    margin: 1%;
-}
-
-.raffle-details::after {
-    content: "";
-    display: block;
-    width: 100%;
-    margin: 2% auto;
-    height: 0.1vw;
-    background: rgb(214, 212, 212);
-}
-
-.raffle-text::after {
-    content: none;
-}
-
-.raffle footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2%;
-}
-
-.raffle-price {
-    font-size: 2vw;
-    color: #fc4c50;
-}
-
-.raffle-action .btn {
-    font-weight: bold;
-    padding: 2% 2%;
+.flex-between {
+  @apply flex justify-between items-center;
 }
