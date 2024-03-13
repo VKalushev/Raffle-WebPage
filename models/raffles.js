@@ -1,4 +1,20 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, mongoose } from 'mongoose';
+
+const TicketSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+    required: true
+  },
+  luckyNumber: {
+    type: Number
+  }
+});
 
 const RaffleSchema = new Schema({
   entry_price: {
@@ -13,14 +29,11 @@ const RaffleSchema = new Schema({
     type: Date,
     required: [true, 'Draw date is required.'],
   },
-  tickets_sold:{
+  participants:{
     type: Number,
     default: 0,
   },
-  participants:{
-    type: [String],
-    default: [],
-  }
+  tickets: [TicketSchema]
 });
 
 const Raffle = models.Raffle || model('Raffle', RaffleSchema);

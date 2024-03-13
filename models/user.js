@@ -1,4 +1,15 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, mongoose } from 'mongoose';
+
+const TicketSchema = new Schema({
+  raffleId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Raffle',
+    required: true
+  },
+  luckyNumber: {
+    type: Number
+  }
+});
 
 const UserSchema = new Schema({
   email: {
@@ -22,7 +33,8 @@ const UserSchema = new Schema({
   role: {
     type: String,
     default: 'Normal'
-  }
+  },
+  tickets: [TicketSchema]
 });
 
 const User = models.User || model("User", UserSchema);

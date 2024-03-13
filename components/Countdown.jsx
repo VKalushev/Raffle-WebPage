@@ -1,31 +1,50 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
-const Countdown = ({ drawDate }) => {
-    const [countdown, setCountdown] = useState('');
-  
-    useEffect(() => {
-      const intervalId = setInterval(() => {
-        const now = new Date();
-        const endDate = new Date(drawDate);
-        const timeDifference = endDate.getTime() - now.getTime();
-  
-        if (timeDifference > 0) {
-          const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-  
-          setCountdown(`${days} days : ${hours} hours : ${minutes} mins : ${seconds} secs`);
-        } else {
-          setCountdown('Expired');
-          clearInterval(intervalId);
-        }
-      }, 1000);
-  
-      return () => clearInterval(intervalId);
-    }, []);
-  
-    return <span>{countdown}</span>;
+const Countdown = ({ drawDate, onStatusChange }) => {
+  const calculateTimeLeft = () => {
+    const difference = +new Date(drawDate) - +new Date();
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    } else {
+      timeLeft = { expired: true };
+    }
+    return timeLeft;
   };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    // Update the status when the countdown changes to "Expired"
+    if (timeLeft.expired) {
+      onStatusChange("Expired");
+    }
+
+    // Clear the timer when the component is unmounted
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
+
+  return (
+    <div>
+      {timeLeft.expired ? (
+        <span>Expired</span>
+      ) : (
+        <span>
+          {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+        </span>
+      )}
+    </div>
+  );
+};
 
 export default Countdown;

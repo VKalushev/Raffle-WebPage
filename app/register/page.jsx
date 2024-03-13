@@ -37,7 +37,7 @@ const RegisterPage = () => {
     }
     // Your registration logic here
     try { 
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/user/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json", // Set the Content-Type header
@@ -47,16 +47,14 @@ const RegisterPage = () => {
             username: formData.username,
             password: formData.password,
         }),
-    });
-    
-    console.log(response)
-    
-        if (response.ok) {
-            router.push("/login");
-        } else {
-          const {message} = await response.json()
-          setError(message)
-        }
+      });
+      
+      if (response.ok) {
+          router.push("/login");
+      } else {
+        const message = await response.json()
+        setError(message)
+      }
     } catch (error) {
         console.log(error);
     }

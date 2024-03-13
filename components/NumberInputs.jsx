@@ -1,6 +1,6 @@
-const NumberInput = ({ value, onChange }) => {
+const NumberInput = ({ value, onChange, disabled}) => {
     const handleDecrease = () => {
-      if (value > 0) {
+      if (value > 1) {
         onChange(value - 1);
       }
     };
@@ -21,6 +21,7 @@ const NumberInput = ({ value, onChange }) => {
         <button
           onClick={handleDecrease}
           className="px-1 py-0 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
+          disabled={disabled}
         >
           -
         </button>
@@ -29,10 +30,12 @@ const NumberInput = ({ value, onChange }) => {
           value={value}
           onChange={handleChange}
           className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none"
+          disabled={disabled}
         />
         <button
           onClick={handleIncrease}
           className="px-1 py-0 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
+          disabled={disabled}
         >
           +
         </button>

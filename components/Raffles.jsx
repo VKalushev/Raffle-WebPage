@@ -27,6 +27,8 @@ const Raffles = () => {
   const [time, setTime] = useState('');
   const [ticketPrice, setTicketPrice] = useState(0);
 
+  const currentDateTime = new Date().toISOString().split("T")[0] + "T" + new Date().toTimeString().split(" ")[0];
+
   // console.log(session.user)
   const fetchRaffles = async () => {
     const response = await fetch("/api/raffles");
@@ -52,16 +54,14 @@ const Raffles = () => {
             time: time,
             ticketPrice: ticketPrice,
         }),
-    });
-    
-    console.log(response)
-    
-        if (response.ok) {
-          setCreatingRaffle(false);
-        } else {
-          const {message} = await response.json()
-          console.error(message);
-        }
+      });
+      
+      if (response.ok) {
+        setCreatingRaffle(false);
+      } else {
+        const {message} = await response.json()
+        console.error(message);
+      }
     } catch (error) {
         console.log(error);
     }
@@ -99,7 +99,7 @@ const Raffles = () => {
               <header className="raffle-header" >
                   <input className="input-reward-box " placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
                   <h3 className="p-14 text-center text-xl text-black">
-                  <input type="datetime-local" placeholder="Select Time" required onChange={(e) => setTime(e.target.value)}/>
+                  <input type="datetime-local" placeholder="Select Time" required min={currentDateTime} onChange={(e) => setTime(e.target.value)}/>
                   </h3>
               </header>
   
