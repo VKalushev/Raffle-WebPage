@@ -1,8 +1,21 @@
 import { connectToDB } from "@utils/database";
 import Raffle from '@models/raffles';
 
+export const GET = async (request) => {
+    const { raffleId } = await request.json();
+    try {
+        await connectToDB()
+
+        const raffle = await Raffle.findById({raffleId})
+
+        return new Response(JSON.stringify(raffle), { status: 200 })
+    } catch (error) {
+        return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
+    }
+} 
+
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, tickets, winning_price, entry_price, draw_date} = await request.json();
+    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date} = await request.json();
 
     try {
         await connectToDB();
@@ -39,9 +52,8 @@ export const PATCH = async (request, { params }) => {
 
             raffle.participants = uniqueUserIds.size;            
         }
-
-        if(winning_price){
-            raffle.winning_price = winning_price;
+        if(winning_prize){
+            raffle.winning_prize = winning_prize;
         }
 
         if(entry_price){

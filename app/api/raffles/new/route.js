@@ -2,9 +2,10 @@ import Raffle from "@models/raffles";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (request) => {
+    const { reward, time, ticketPrice } = await request.json();
+    
     try {
         await connectToDB()
-        const { reward, time, ticketPrice } = await request.json();
     
         try {
 

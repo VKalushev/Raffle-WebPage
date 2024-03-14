@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
 import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
+import Link from "next/link";
   
   const RaffleCard = ({ raffle, onRaffleCardUpdate }) => {
     const { data: session } = useSession();
@@ -18,6 +19,7 @@ import Countdown from "./Countdown";
     const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
     const [participantsCount, setParticipantsCount] = useState(raffle.participants);
     const router = useRouter();
+    
     useEffect(() => {
       if (countDownText === "Expired") {
         setIsExpired(true);
@@ -27,7 +29,6 @@ import Countdown from "./Countdown";
     useEffect(() => {
       setTicketsCount(raffle.tickets.length);
       setParticipantsCount(raffle.participants);
-      // onRaffleCardUpdate(/* updated data */);
     }, [raffle]);
 
     const handleOptionChange = (e) => {
@@ -43,7 +44,9 @@ import Countdown from "./Countdown";
     };
     
     const handleEdit = () => {
-      router.push(`/raffle/${raffle._id}/edit`)
+      // router.push(`/raffle/${raffle._id}/edit?id=${raffle._id}`);
+      // router.push(`/raffle/${raffle._id}/edit?reward=${raffle.winning_prize}&time=${raffle.draw_date}&price=${raffle.entry_price}`);
+      router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
     }
 
     const handleDelete = async (e) => {
@@ -75,7 +78,6 @@ import Countdown from "./Countdown";
               break;
             }
           }
-          console.log(user_response.ok)
           if(user_response && user_response.ok){
             onRaffleCardUpdate(/* updated data */);
           }
@@ -86,6 +88,10 @@ import Countdown from "./Countdown";
         
       }
     };
+
+    const handleOpenRafflePage = () => {
+      router.push(`/raffle/${raffle._id}?raffle=${JSON.stringify(raffle)}`);
+    }
 
     const handleEnterRaffleButton  = async (e) => {
       e.preventDefault();
@@ -134,6 +140,8 @@ import Countdown from "./Countdown";
           } catch (error) {
             console.log(error);
           }
+        } else {
+          setMessage(await response.json())
         }
       } catch (error) {
         console.log(error);
@@ -142,16 +150,11 @@ import Countdown from "./Countdown";
   
     return (
       <div className="prompt_card">
-        <header className="raffle-header">
+        <header className="raffle-header cursor-pointer" onClick={handleOpenRafflePage}>
           <div className="flex">
-            <span className="reward-box">Price: {raffle.winning_prize}</span>
+            <span className="reward-box">Prize: {raffle.winning_prize}</span>
 
-            {session?.user.role === "Admin" && (
-              <div className='flex gap'>
-                <button className='reward-box' onClick={handleEdit}>Edit</button>
-                <button className='reward-box' onClick={handleDelete}> Delete</button>
-              </div>
-            )}
+            
           </div>
           <h3 className="p-14 text-center text-xl">
           <Countdown drawDate={raffle.draw_date} onStatusChange={setcountDownText} />
@@ -202,11 +205,16 @@ import Countdown from "./Countdown";
             <button className="raffle_btn" onClick={handleEnterRaffleButton} disabled={isExpired}>
               Enter Raffle
             </button>
-            
+            {session?.user.role === "Admin" && (
+              <div className='flex gap'>
+                <button className='raffle_btn' onClick={handleEdit}>Edit</button>
+                <button className='raffle_btn' onClick={handleDelete}> Delete</button>
+              </div>
+            )}
           </div>
           <div className="flex-center">
             {message && (
-              <p className={message === 'There was a problem with buying the tickets' ? "text-red-600" : "text-green-600"}>
+              <p className={message === 'There was a problem with buying the tickets' || message === "You already have that lucky number for this raffle" ? "text-red-600" : "text-green-600"}>
               {message}
               </p>
             )}
