@@ -1,12 +1,11 @@
 import { connectToDB } from "@utils/database";
 import Raffle from '@models/raffles';
 
-export const GET = async (request) => {
-    const { raffleId } = await request.json();
+export const GET = async (request, { params }) => {
     try {
         await connectToDB()
 
-        const raffle = await Raffle.findById({raffleId})
+        const raffle = await Raffle.findById(params.id)
 
         return new Response(JSON.stringify(raffle), { status: 200 })
     } catch (error) {

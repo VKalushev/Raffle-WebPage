@@ -90,7 +90,7 @@ import Link from "next/link";
     };
 
     const handleOpenRafflePage = () => {
-      router.push(`/raffle/${raffle._id}?raffle=${JSON.stringify(raffle)}`);
+      router.push(`/raffle/${raffle._id}`);
     }
 
     const handleEnterRaffleButton  = async (e) => {
