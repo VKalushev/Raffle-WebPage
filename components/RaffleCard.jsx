@@ -57,12 +57,22 @@ import Countdown from "./Countdown";
             }),
           });
 
-          tickets = await response.json();
-          if (tickets.length > 0){
+
+          let tickets = await response.json();
+
+          while (tickets.length > 0){
             try {
+              const user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+                method: "PATCH",
+                body: JSON.stringify({
+                  tickets: tickets,
+                  }),
+              });
+              tickets = await user_response.json()
               
             } catch (error) {
-              
+              console.log(error)
+              break;
             }
           }
 

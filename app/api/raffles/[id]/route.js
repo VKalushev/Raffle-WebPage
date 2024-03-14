@@ -66,11 +66,9 @@ export const PATCH = async (request, { params }) => {
 
 export const DELETE = async (request, { params }) => {
     const { raffleId } = await request.json();
-    console.log(raffleId)
     try {
         await connectToDB();
         const raffle = await Raffle.findByIdAndDelete(raffleId);
-        console.log(raffle)
         
         return new Response(JSON.stringify(raffle.tickets), { status: 200 });
     } catch (error) {
