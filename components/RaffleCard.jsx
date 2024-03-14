@@ -7,7 +7,7 @@ import RadioButton from "./RadioButton";
 import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
   
-  const RaffleCard = ({ raffle }) => {
+  const RaffleCard = ({ raffle, onRaffleCardUpdate }) => {
     const { data: session } = useSession();
     const [ticketCount, setTicketCount] = useState(1);
     const [selectedOption, setSelectedOption] = useState('random_raffle');
@@ -18,7 +18,6 @@ import Countdown from "./Countdown";
     const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
     const [participantsCount, setParticipantsCount] = useState(raffle.participants);
     const router = useRouter();
-
     useEffect(() => {
       if (countDownText === "Expired") {
         setIsExpired(true);
@@ -28,6 +27,7 @@ import Countdown from "./Countdown";
     useEffect(() => {
       setTicketsCount(raffle.tickets.length);
       setParticipantsCount(raffle.participants);
+      // onRaffleCardUpdate(/* updated data */);
     }, [raffle]);
 
     const handleOptionChange = (e) => {
@@ -56,13 +56,13 @@ import Countdown from "./Countdown";
             raffleId: raffle._id,
             }),
           });
-
+          
 
           let tickets = await response.json();
-
+          let user_response = undefined;
           while (tickets.length > 0){
             try {
-              const user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+              user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
                 method: "PATCH",
                 body: JSON.stringify({
                   tickets: tickets,
@@ -74,6 +74,10 @@ import Countdown from "./Countdown";
               console.log(error)
               break;
             }
+          }
+          console.log(user_response.ok)
+          if(user_response && user_response.ok){
+            onRaffleCardUpdate(/* updated data */);
           }
 
         } catch (error) {

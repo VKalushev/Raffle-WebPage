@@ -5,13 +5,14 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import RadioButton from "./RadioButton";
 
-const PromptRaffleList = ({ data}) => {
+const PromptRaffleList = ({ data, onRaffleCardUpdate  }) => {
   return (
     <div className='prompt_layout'>
       {data && data.length > 0 && data.map((raffle) => (
         <RaffleCard
           key={raffle._id}
           raffle={raffle}
+          onRaffleCardUpdate={onRaffleCardUpdate}
         />
       ))}
     </div>
@@ -56,6 +57,7 @@ const Raffles = () => {
       
       if (response.ok) {
         setCreatingRaffle(false);
+        fetchRaffles();
       } else {
         const {message} = await response.json()
         console.error(message);
@@ -163,7 +165,7 @@ const Raffles = () => {
        {/* <div className="mb-20"><RaffleCard ></RaffleCard></div> */}
        { allRaffles.length > 0 &&(
         <div>
-        <PromptRaffleList data={allRaffles}/>
+        <PromptRaffleList data={allRaffles} onRaffleCardUpdate={fetchRaffles}/>
         </div>
        )}
       
