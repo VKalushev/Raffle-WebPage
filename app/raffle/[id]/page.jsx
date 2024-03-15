@@ -1,15 +1,10 @@
 "use client";
 
-import CustomWheel from "@components/CustomWheel";
 import RaffleCard from "@components/RaffleCard";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 
-
-
-
 const RafflePage = () => {
-  const [prizeNumber, setPrizeNumber] = useState(0);
   const [luckyNumber, setLuckyNumber] = useState(0);
   const [raffle, setRaffle] = useState(null);
   const pathName = usePathname();
@@ -19,16 +14,6 @@ const RafflePage = () => {
     return parts[parts.length - 1];
   };
 
-  const data = [
-    { option: 'REACT 0' },
-    { option: 'CUSTOM' },
-    { option: 'ROULETTE', style: { textColor: '#f9dd50' } },
-    { option: 'WHEEL' },
-    { option: 'REACT' },
-    { option: 'CUSTOM' },
-    { option: 'ROULETTE', style: { textColor: '#70bbe0' } },
-    { option: 'WHEEL' },
-  ];
   const fetchRaffle = async () => {
     const id = extractIdFromURL();
     const response = await fetch(`/api/raffles/${id}`);
@@ -57,13 +42,6 @@ const RafflePage = () => {
               onRaffleCardUpdate={fetchRaffle}
             />
           )}
-        <div className="">
-        <CustomWheel 
-          iPrizeNumber={prizeNumber}
-          data = {data}
-          setWinningNumber={(e) => setPrizeNumber(e.value)}
-        />
-        </div>
         </div>
       </div>
       
