@@ -5,9 +5,31 @@ export const GET = async (request, { params }) => {
     try {
         await connectToDB()
 
-        const raffle = await Raffle.findById(params.id)
-
-        return new Response(JSON.stringify(raffle), { status: 200 })
+        const raffle = await Raffle.findById(params.id).populate("tickets.userId")
+        let data = [];
+        
+        raffle.tickets.forEach(ticket => {
+            const current_user_username = ticket.userId.username;
+            let isUserInData = false;
+            for (let i = 0; i < data.length; i++) {
+                if(data[i].option === current_user_username || data[i].option === ticket.luckyNumber){
+                    data[i].optionSize +=1;
+                    isUserInData = true;
+                    break;
+                }
+            }
+            
+            if(!isUserInData){
+                if(ticket.luckyNumber){
+                    data.push({option: ticket.luckyNumber, optionSize: 1});
+                } else {
+                    data.push({option: current_user_username, optionSize: 1});
+                }
+            }
+            
+        });
+        console.log(data)
+        return new Response(JSON.stringify({response_data: raffle}), { status: 200 })
     } catch (error) {
         return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
     }
@@ -18,6 +40,7 @@ export const PATCH = async (request, { params }) => {
 
     try {
         await connectToDB();
+        console.log('test')
         const raffle = await Raffle.findById(raffleId);
 
         if (!raffle) {

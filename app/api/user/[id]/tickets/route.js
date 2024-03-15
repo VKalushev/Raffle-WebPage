@@ -9,7 +9,7 @@ export const PATCH = async (request, { params }) => {
         await connectToDB();
         let user = undefined;
         let newTickets = []
-
+        
         if(userId){
             user = await User.findById(userId);
         } else{
@@ -19,7 +19,7 @@ export const PATCH = async (request, { params }) => {
         if (!user) {
             return new Response("User not found", { status: 404 });
         }
-
+        
         // If there is no such variables tickets it would proceed to add the 
         // amount of tickets provide or lucky Number, but if there is tickets 
         // variable it would remove the tickets from the user account
@@ -27,10 +27,12 @@ export const PATCH = async (request, { params }) => {
             // If amount of tickets is given it means multiple tickets else it would be a luckyNumber ticket
             if(!amountOfTickets){
                 for (let i = 0; i < user.tickets.length; i++) {
-                    const current_luckyNumber = user.tickets[i].luckyNumber.toString();
-                    const current_raffleId = user.tickets[i].raffleId.toString();
-                    if(current_luckyNumber === luckyNumber && current_raffleId === raffleId){
-                        return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                    if(user.tickets[i].luckyNumber){
+                        const current_luckyNumber = user.tickets[i].luckyNumber.toString();
+                        const current_raffleId = user.tickets[i].raffleId.toString();
+                        if(current_luckyNumber === luckyNumber && current_raffleId === raffleId){
+                            return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                        }
                     }
                 }
                 const newTicket = {
@@ -38,7 +40,7 @@ export const PATCH = async (request, { params }) => {
                     raffleId: raffleId,
                     luckyNumber: luckyNumber
                 };
-
+                
                 newTickets.push(newTicket)
                 user.tickets.push(newTicket)
             } else {
