@@ -2,16 +2,18 @@ import RadioButton from "./RadioButton";
 
 import { useState } from "react";
 
-const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_holder, ticketPrice_place_holder }) => {
+const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_holder, ticketPrice_place_holder, isSharable }) => {
     const [reward, setReward] = useState(reward_place_holder);
     const [time, setTime] = useState(time_place_holder);
     const [ticketPrice, setTicketPrice] = useState(ticketPrice_place_holder);
+    const [isShared, setIsShared] = useState(isSharable);
+
 
     const currentDateTime = new Date().toISOString().split("T")[0] + "T" + new Date().toTimeString().split(" ")[0];
 
     const handleConfirmClick = (e) => {
         e.preventDefault();
-        onConfirm(reward, time, ticketPrice);
+        onConfirm(reward, time, ticketPrice, isShared);
     };
 
     const handleCancelClick = () => {
@@ -21,10 +23,35 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
         onCancel();
       };
 
-  return (
-    <form onSubmit={handleConfirmClick} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">
+      const handleOptionChange = (e) => {
+        const newValue = e.target.value === "is_sharable";
+        setIsShared(newValue);
+    };
+
+    return (
+    <form onSubmit={handleConfirmClick} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">   
         <header className="raffle-header" >
             <input className="input-reward-box " value={reward} placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
+
+            <div className="is-sharable-box">
+                    <RadioButton 
+                        id={0}
+                        value="is_sharable"
+                        checked={isShared}
+                        onChange={handleOptionChange}
+                        label="Is Shared"
+                        disabled={false}
+                    />
+                    <RadioButton 
+                        id={1} 
+                        value="not_sharable" 
+                        checked={!isShared}
+                        onChange={handleOptionChange} 
+                        label="Not Shared"
+                        disabled={false}
+                    />
+                </div>
+
             <h3 className="p-14 text-center text-xl text-black">
             <input
                 type="datetime-local"
@@ -63,11 +90,13 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
             </div>
 
             <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
-                <RadioButton id={0} value="random_raffle" 
+                <RadioButton 
+                    id={0} value="random_raffle" 
                     checked= {true} 
                     onChange={() => {}} 
                     label="Random Raffle"
-                    disabled = {true}/>
+                    disabled = {true}
+                    />
                 <RadioButton id={1} value="lucky_number" 
                     checked={false} 
                     onChange={() => {}} 
@@ -89,4 +118,4 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
   )
 }
 
-export default CreateRaffle
+export default CreateRaffle;

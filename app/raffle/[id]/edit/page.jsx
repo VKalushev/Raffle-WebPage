@@ -16,9 +16,10 @@ const EditPage = () => {
     }
   };
 
-  const handleConfirmButton = async (reward, time, ticketPrice) => {
-    
+  const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
     if (window.confirm("Are you sure you want to save the changes?")) {
+      console.log(isSharable)  
+  
       try { 
         const response = await fetch(`/api/raffles/${raffle._id}`, {
           method: "PATCH",
@@ -27,6 +28,7 @@ const EditPage = () => {
             winning_prize: reward,
             draw_date: time,
             entry_price: ticketPrice,
+            isSharable: isSharable,
           }),
         });
         if (response.ok) {
@@ -47,13 +49,14 @@ const EditPage = () => {
             <h1 className=" text-white head_text text-center py-4 ">Welcome to the Editing Page</h1>
             <p className="desc text-center">Edit Raffles with single clicks and changes, change the prize title, the entry price or even when the end date/time for the raffle </p>
       </section>
-      <div className="flex-center mt-10">
+      <div className="flex-center mt-9">
         <CreateRaffle 
         onCancel={handleCancelCreateRaffle}
         onConfirm={handleConfirmButton}
         reward_place_holder={raffle.winning_prize}
         time_place_holder={raffle.draw_date.slice(0, -1)}
-        ticketPrice_place_holder={parseInt(raffle.entry_price)} 
+        ticketPrice_place_holder={parseInt(raffle.entry_price)}
+        isSharable={raffle.is_sharable} 
         />
       </div>
     </div>

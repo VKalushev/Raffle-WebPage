@@ -1,21 +1,41 @@
 import { connectToDB } from "@utils/database";
 import Raffle from '@models/raffles';
 
-export const GET = async (request) => {
-    const { raffleId } = await request.json();
+export const GET = async (request, { params }) => {
     try {
         await connectToDB()
+        const raffle = await Raffle.findById(params.id).populate("tickets.userId")
+        let data = [];
+        
+        raffle.tickets.forEach(ticket => {
+            const current_user_username = ticket.userId.username;
+            let isUserInData = false;
+            for (let i = 0; i < data.length; i++) {
+                if(data[i].option === current_user_username || data[i].option === ticket.luckyNumber){
+                    data[i].optionSize +=1;
+                    isUserInData = true;
+                    break;
+                }
+            }
+            
+            if(!isUserInData){
+                if(ticket.luckyNumber){
+                    data.push({option: ticket.luckyNumber, optionSize: 1});
+                } else {
+                    data.push({option: current_user_username, optionSize: 1});
+                }
+            }
+            
+        });
 
-        const raffle = await Raffle.findById({raffleId})
-
-        return new Response(JSON.stringify(raffle), { status: 200 })
+        return new Response(JSON.stringify({response_data: raffle}), { status: 200 })
     } catch (error) {
         return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
     }
 } 
 
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date} = await request.json();
+    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date, isSharable} = await request.json();
 
     try {
         await connectToDB();
@@ -63,6 +83,10 @@ export const PATCH = async (request, { params }) => {
         if(draw_date){
             raffle.draw_date = draw_date;
         }
+        if(isSharable != undefined){
+            raffle.is_sharable = isSharable;
+        }
+        
         try {
             const response_raffle = raffle;
             await raffle.save();
@@ -80,7 +104,7 @@ export const DELETE = async (request, { params }) => {
     const { raffleId } = await request.json();
     try {
         await connectToDB();
-        const raffle = await Raffle.findByIdAndDelete(raffleId);
+        const raffle = await Raffle.findByIdAndDelete(raffleId).populate("tickets.userId");
         
         return new Response(JSON.stringify(raffle.tickets), { status: 200 });
     } catch (error) {

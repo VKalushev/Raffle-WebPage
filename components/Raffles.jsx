@@ -5,10 +5,18 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import CreateRaffle from "./CreateRaffle";
 
-const PromptRaffleList = ({ data, onRaffleCardUpdate  }) => {
+const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
+  // Check if data exists and is not empty
+  if (!data || data.length === 0) {
+    return null; // or you can render a placeholder, message, or any other UI element
+  }
+
+  // Filter out archived raffles
+  const activeRaffles = data.filter((raffle) => !raffle.archived);
+
   return (
     <div className='prompt_layout'>
-      {data && data.length > 0 && data.map((raffle) => (
+      {activeRaffles.map((raffle) => (
         <RaffleCard
           key={raffle._id}
           raffle={raffle}
@@ -19,26 +27,16 @@ const PromptRaffleList = ({ data, onRaffleCardUpdate  }) => {
   );
 };
 
+const Raffles = ({allRaffles, fetchRaffles, session}) => {
+  const [creatingRaffle, setCreatingRaffle] = useState(false);
 
-const Raffles = () => {
-  const [allRaffles, setAllRaffles] = useState([]);
-  const [creatingRaffle, setCreatingRaffle] = useState(false); // State to manage the creation of a new raffle
-  const { data: session } = useSession();
-
-  const fetchRaffles = async () => {
-    const response = await fetch("/api/raffles");
-    const data = await response.json();
-
-    setAllRaffles(data);
-  };
 
   useEffect(() => {
     fetchRaffles();
   }, []);
 
   
-  const handleConfirmButton = async (reward, time, ticketPrice) => {
-
+  const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
     try { 
       const response = await fetch("/api/raffles/new", {
         method: "POST",
@@ -46,6 +44,7 @@ const Raffles = () => {
             reward: reward,
             time: time,
             ticketPrice: ticketPrice,
+            isSharable: isSharable,
         }),
       });
       
@@ -89,7 +88,8 @@ const Raffles = () => {
                   onConfirm={handleConfirmButton}
                   reward_place_holder="Enter Prize"
                   time_place_holder=""
-                  ticketPrice_place_holder={0} />
+                  ticketPrice_place_holder={0}
+                  isSharable={false} />
               )}
             </div>
           )}

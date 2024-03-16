@@ -3,42 +3,51 @@ import User from '@models/user';
 import mongoose from "mongoose";
 
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, amountOfTickets, luckyNumber, tickets, test} = await request.json();
+    const { raffleId, userId, amountOfTickets, luckyNumber, tickets, raffle} = await request.json();
 
     try {
         await connectToDB();
         let user = undefined;
         let newTickets = []
-
+        
         if(userId){
             user = await User.findById(userId);
-        } else{
-            user = await User.findById(tickets[0].userId);
+        } else {
+            user = await User.findById(tickets[0].userId._id);
         }
-        
+            
         if (!user) {
             return new Response("User not found", { status: 404 });
         }
-
+        
         // If there is no such variables tickets it would proceed to add the 
         // amount of tickets provide or lucky Number, but if there is tickets 
         // variable it would remove the tickets from the user account
         if(!tickets){
             // If amount of tickets is given it means multiple tickets else it would be a luckyNumber ticket
             if(!amountOfTickets){
-                for (let i = 0; i < user.tickets.length; i++) {
-                    const current_luckyNumber = user.tickets[i].luckyNumber.toString();
-                    const current_raffleId = user.tickets[i].raffleId.toString();
-                    if(current_luckyNumber === luckyNumber && current_raffleId === raffleId){
-                        return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                if(!raffle.is_sharable){
+                    for (let i = 0; i < raffle.tickets.length; i++) {
+                        const currentTicket = raffle.tickets[i];
+                        if(currentTicket.luckyNumber){
+                            if (luckyNumber.toString() === currentTicket.luckyNumber.toString()) {
+                                if(currentTicket.userId != userId){
+                                    return new Response(JSON.stringify("Sorry but Number has been picked by another user"), { status: 500 });
+                                } else {
+                                    return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                                }
+                            }
+                        }
+                        
                     }
                 }
+                
                 const newTicket = {
                     _id: new mongoose.Types.ObjectId(),
-                    raffleId: raffleId,
+                    raffleId: raffle._id,
                     luckyNumber: luckyNumber
                 };
-
+                
                 newTickets.push(newTicket)
                 user.tickets.push(newTicket)
             } else {
@@ -54,7 +63,7 @@ export const PATCH = async (request, { params }) => {
         } else {
             for (let i = 0; i < tickets.length; i++) {
                 const ticket = tickets[i];
-                const first_userId_string = ticket.userId.toString()
+                const first_userId_string = ticket.userId._id.toString()
                 const second_userId_string = user._id.toString()
                 if(first_userId_string === second_userId_string){
                     for (let k = 0; k < user.tickets.length; k++) {
@@ -83,6 +92,7 @@ export const PATCH = async (request, { params }) => {
         return new Response(JSON.stringify(response_tickets), { status: 200 });
 
     } catch (error) {
+        console.log(error)
         return new Response("Error Updating Prompt", { status: 500 });
     }
 };
