@@ -27,17 +27,9 @@ const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
   );
 };
 
-const Raffles = () => {
-  const [allRaffles, setAllRaffles] = useState([]);
-  const [creatingRaffle, setCreatingRaffle] = useState(false); // State to manage the creation of a new raffle
-  const { data: session } = useSession();
+const Raffles = ({allRaffles, fetchRaffles, session}) => {
+  const [creatingRaffle, setCreatingRaffle] = useState(false);
 
-  const fetchRaffles = async () => {
-    const response = await fetch("/api/raffles");
-    const data = await response.json();
-
-    setAllRaffles(data);
-  };
 
   useEffect(() => {
     fetchRaffles();
