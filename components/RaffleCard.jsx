@@ -14,7 +14,6 @@ import Link from "next/link";
     const [selectedOption, setSelectedOption] = useState('random_raffle');
     const [message, setMessage] = useState(null);
     const [luckyNumber, setLuckyNumber] = useState('');
-    const [raffleWinner, setRaffleWinner] = useState('');
     const [countDownText, setcountDownText] = useState('');
     const [isExpired, setIsExpired] = useState(false);
     const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
@@ -79,7 +78,7 @@ import Link from "next/link";
         console.log(error)
       }
     }
-
+    // console.log(raffle.is_sharable)
     const handleOptionChange = (e) => {
       setSelectedOption(e.target.value);
     };
@@ -159,7 +158,7 @@ import Link from "next/link";
           }
       } else {
         body = {
-          raffleId: raffle._id,
+          raffle: raffle,
           userId: userId,
           luckyNumber: luckyNumber,
           }
@@ -202,11 +201,11 @@ import Link from "next/link";
     };
   
     return (
-      <div className="prompt_card">
+      <div className="raffle_card">
         <header className="raffle-header cursor-pointer" onClick={handleOpenRafflePage}>
           <div className="flex">
             <span className="reward-box">Prize: {raffle.winning_prize}</span>
-
+            <span className="reward-box">Sharable: {raffle.is_sharable.toString()}</span>
             
           </div>
           <h3 className="p-14 text-center text-xl">
@@ -277,7 +276,7 @@ import Link from "next/link";
           </div>
           <div className="flex-center">
             {message && (
-              <p className={message === 'There was a problem with buying the tickets' || message === "You already have that lucky number for this raffle" ? "text-red-600" : "text-green-600"}>
+              <p className={message === 'There was a problem with buying the tickets' || message === "You already have that lucky number for this raffle" || message === "Sorry but Number has been picked by another user" ? "text-red-600" : "text-green-600"}>
               {message}
               </p>
             )}

@@ -5,10 +5,18 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import CreateRaffle from "./CreateRaffle";
 
-const PromptRaffleList = ({ data, onRaffleCardUpdate  }) => {
+const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
+  // Check if data exists and is not empty
+  if (!data || data.length === 0) {
+    return null; // or you can render a placeholder, message, or any other UI element
+  }
+
+  // Filter out archived raffles
+  const activeRaffles = data.filter((raffle) => !raffle.archived);
+
   return (
     <div className='prompt_layout'>
-      {data && data.length > 0 && data.map((raffle) => (
+      {activeRaffles.map((raffle) => (
         <RaffleCard
           key={raffle._id}
           raffle={raffle}
@@ -18,7 +26,6 @@ const PromptRaffleList = ({ data, onRaffleCardUpdate  }) => {
     </div>
   );
 };
-
 
 const Raffles = () => {
   const [allRaffles, setAllRaffles] = useState([]);
@@ -38,7 +45,6 @@ const Raffles = () => {
 
   
   const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
-
     try { 
       const response = await fetch("/api/raffles/new", {
         method: "POST",

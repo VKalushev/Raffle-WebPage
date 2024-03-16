@@ -7,7 +7,7 @@ const RadioButton = ({ id, value, checked, onChange, label, disabled }) => {
         value={value}
         checked={checked}
         onChange={onChange}
-        disabled={disabled} // Add disabled attribute here
+        disabled={disabled}
         className={`h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       />
       <label htmlFor={id} className={`ml-2 block text-sm text-gray-900 ${disabled ? 'text-gray-500' : ''}`}>

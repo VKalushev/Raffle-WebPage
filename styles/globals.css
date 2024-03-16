@@ -164,9 +164,10 @@
 }
 
 /* PromptCard Component */
-.prompt_card {
+.raffle_card {
   @apply break-inside-avoid rounded-lg border border-black bg-green-300  md:w-auto w-full h-fit;
 }
+
 
 .create_raffle {
   @apply flex-1 break-inside-avoid rounded-lg border mt-10 border-black bg-green-300 bg-clip-padding backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
@@ -176,15 +177,17 @@
   @apply rounded-lg border mt-10 border-black opacity-50 md:w-auto w-full h-full md:h-auto;
 }
 
+
 .reward-box {
   @apply rounded-lg border border-black bg-gray-400 text-xs p-1 ml-1 mt-1  bg-clip-padding  backdrop-filter md:w-auto w-full h-fit;
 }
 
 .input-reward-box {
-  @apply rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 h-fit;
+  @apply rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 bg-clip-padding  backdrop-filter  h-fit;
 }
+
 .is-sharable-box {
-  @apply rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 w-52 h-fit flex gap-5;
+  @apply flex gap-5 rounded-lg border border-black text-black bg-gray-400 text-xs p-1 ml-1 mt-1 w-52 h-fit;
 }
 
 .flex-center {

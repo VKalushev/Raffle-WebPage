@@ -37,25 +37,29 @@ export const PATCH = async (request, { params }) => {
         await connectToDB();
         let winners = ""
         const raffle = await Raffle.findById(raffleId);
-        const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
-        const winningTicket = raffle.tickets[winningIndex]
-        if(winningTicket) {
-            winners = winningTicket.userId.username.toString();
-            if(winningTicket.luckyNumber){
-                for (let i = 1; i < raffle.tickets.length; i++) {
-                    const currentWinner = raffle.tickets[i].userId.username;
-                    console.log(currentWinner)
-                    if(i + 1 === raffle.tickets.length){
-                        winners += ` and ${currentWinner}`;
-                    } else {
-                        winners += `, ${currentWinner}`;
+        if(raffle.tickets){
+            const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
+            const winningTicket = raffle.tickets[winningIndex]
+            if(winningTicket) {
+                winners = winningTicket.userId.username.toString();
+                if(winningTicket.luckyNumber){
+                    for (let i = 1; i < raffle.tickets.length; i++) {
+                        const currentWinner = raffle.tickets[i].userId.username;
+                        console.log(currentWinner)
+                        if(i + 1 === raffle.tickets.length){
+                            winners += ` and ${currentWinner}`;
+                        } else {
+                            winners += `, ${currentWinner}`;
+                        }
                     }
                 }
             }
+        } else {
+            winners = "No Participants"
         }
-        
+            
         raffle.winners = winners;
-        raffle.isArchived = true;
+        raffle.archived = true;
         await raffle.save();
         return new Response(JSON.stringify({tickets: raffle.tickets}), { status: 200 })
     } catch (error) {

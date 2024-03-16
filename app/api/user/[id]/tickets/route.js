@@ -3,7 +3,7 @@ import User from '@models/user';
 import mongoose from "mongoose";
 
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, amountOfTickets, luckyNumber, tickets, test} = await request.json();
+    const { raffleId, userId, amountOfTickets, luckyNumber, tickets, raffle} = await request.json();
 
     try {
         await connectToDB();
@@ -26,18 +26,25 @@ export const PATCH = async (request, { params }) => {
         if(!tickets){
             // If amount of tickets is given it means multiple tickets else it would be a luckyNumber ticket
             if(!amountOfTickets){
-                for (let i = 0; i < user.tickets.length; i++) {
-                    if(user.tickets[i].luckyNumber){
-                        const current_luckyNumber = user.tickets[i].luckyNumber.toString();
-                        const current_raffleId = user.tickets[i].raffleId.toString();
-                        if(current_luckyNumber === luckyNumber && current_raffleId === raffleId){
-                            return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                if(!raffle.is_sharable){
+                    for (let i = 0; i < raffle.tickets.length; i++) {
+                        const currentTicket = raffle.tickets[i];
+                        if(currentTicket.luckyNumber){
+                            if (luckyNumber.toString() === currentTicket.luckyNumber.toString()) {
+                                if(currentTicket.userId != userId){
+                                    return new Response(JSON.stringify("Sorry but Number has been picked by another user"), { status: 500 });
+                                } else {
+                                    return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
+                                }
+                            }
                         }
+                        
                     }
                 }
+                
                 const newTicket = {
                     _id: new mongoose.Types.ObjectId(),
-                    raffleId: raffleId,
+                    raffleId: raffle._id,
                     luckyNumber: luckyNumber
                 };
                 
@@ -85,6 +92,7 @@ export const PATCH = async (request, { params }) => {
         return new Response(JSON.stringify(response_tickets), { status: 200 });
 
     } catch (error) {
+        console.log(error)
         return new Response("Error Updating Prompt", { status: 500 });
     }
 };

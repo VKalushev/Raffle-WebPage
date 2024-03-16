@@ -6,14 +6,14 @@ export const POST = async (request) => {
     
     try {
         await connectToDB()
-    
+        console.log(isSharable)
         try {
 
             await Raffle.create({
                 winning_prize: reward,
                 draw_date: time,
                 entry_price: ticketPrice,
-                isSharable: isSharable,
+                is_sharable: isSharable,
             });
             return new Response(JSON.stringify("Raffle Successfully created"), { status: 201 });
         }   catch (error) {

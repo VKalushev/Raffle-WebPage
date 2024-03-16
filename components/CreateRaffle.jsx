@@ -6,7 +6,8 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
     const [reward, setReward] = useState(reward_place_holder);
     const [time, setTime] = useState(time_place_holder);
     const [ticketPrice, setTicketPrice] = useState(ticketPrice_place_holder);
-    const [isShared, setIsSharable] = useState(isSharable);
+    const [isShared, setIsShared] = useState(isSharable);
+
 
     const currentDateTime = new Date().toISOString().split("T")[0] + "T" + new Date().toTimeString().split(" ")[0];
 
@@ -19,38 +20,37 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
         setReward('')
         setTime('')
         setTicketPrice(0)
-        setIsSharable(false)
         onCancel();
       };
 
-    const handleOptionChange = (e) => {
-        // Update isSharable state based on the selected value
-        setIsSharable(e.target.value === "is_sharable");
+      const handleOptionChange = (e) => {
+        const newValue = e.target.value === "is_sharable";
+        setIsShared(newValue);
     };
-  return (
-    <form onSubmit={handleConfirmClick} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">
-    {/* <form onSubmit={handleConfirmClick} className="create_raffle"> */}
+
+    return (
+    <form onSubmit={handleConfirmClick} className="rounded-lg border border-black bg-green-300  md:w-[360px] w-full h-fit">   
         <header className="raffle-header" >
             <input className="input-reward-box " value={reward} placeholder="Prize: Electronics Bundle" required onChange={(e) => setReward(e.target.value)}></input>
 
             <div className="is-sharable-box">
-                <RadioButton 
-                    id={0}
-                    value="is_sharable"
-                    checked={isShared}
-                    onChange={handleOptionChange}
-                    label="Is Shared"
-                    disabled={false}
-                />
-                <RadioButton 
-                    id={1} 
-                    value="not_sharable" 
-                    checked={!isShared} // Inverse of isSharable
-                    onChange={handleOptionChange} 
-                    label="Not Shared"
-                    disabled={false}
-                />
-            </div>
+                    <RadioButton 
+                        id={0}
+                        value="is_sharable"
+                        checked={isShared}
+                        onChange={handleOptionChange}
+                        label="Is Shared"
+                        disabled={false}
+                    />
+                    <RadioButton 
+                        id={1} 
+                        value="not_sharable" 
+                        checked={!isShared}
+                        onChange={handleOptionChange} 
+                        label="Not Shared"
+                        disabled={false}
+                    />
+                </div>
 
             <h3 className="p-14 text-center text-xl text-black">
             <input
