@@ -47,7 +47,7 @@ const EditPage = () => {
             <h1 className=" text-white head_text text-center py-4 ">Welcome to the Editing Page</h1>
             <p className="desc text-center">Edit Raffles with single clicks and changes, change the prize title, the entry price or even when the end date/time for the raffle </p>
       </section>
-      <div className="flex-center mt-10">
+      <div className="prompt_layout">
         <CreateRaffle 
         onCancel={handleCancelCreateRaffle}
         onConfirm={handleConfirmButton}

@@ -33,8 +33,7 @@ const RafflePage = () => {
             <h1 className=" text-white head_text text-center py-4 ">Welcome to the Raffle Page</h1>
             <p className="desc text-center">Enter Raffle and live track the results of the raffle </p>
       </section>
-      <div className="flex-center">
-        <div className="prompt_layout">
+        <div className="prompt_layout ml-10">
           {raffle && (
             <RaffleCard
               key={raffle._id}
@@ -43,7 +42,6 @@ const RafflePage = () => {
             />
           )}
         </div>
-      </div>
       
       
     </div>

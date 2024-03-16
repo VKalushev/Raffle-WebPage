@@ -37,7 +37,7 @@ const Raffles = () => {
   }, []);
 
   
-  const handleConfirmButton = async (reward, time, ticketPrice) => {
+  const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
 
     try { 
       const response = await fetch("/api/raffles/new", {
@@ -46,6 +46,7 @@ const Raffles = () => {
             reward: reward,
             time: time,
             ticketPrice: ticketPrice,
+            isSharable: isSharable,
         }),
       });
       
@@ -89,7 +90,8 @@ const Raffles = () => {
                   onConfirm={handleConfirmButton}
                   reward_place_holder="Enter Prize"
                   time_place_holder=""
-                  ticketPrice_place_holder={0} />
+                  ticketPrice_place_holder={0}
+                  isSharable={false} />
               )}
             </div>
           )}

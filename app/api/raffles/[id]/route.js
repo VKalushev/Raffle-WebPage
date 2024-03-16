@@ -4,7 +4,6 @@ import Raffle from '@models/raffles';
 export const GET = async (request, { params }) => {
     try {
         await connectToDB()
-
         const raffle = await Raffle.findById(params.id).populate("tickets.userId")
         let data = [];
         
@@ -28,7 +27,7 @@ export const GET = async (request, { params }) => {
             }
             
         });
-        console.log(data)
+
         return new Response(JSON.stringify({response_data: raffle}), { status: 200 })
     } catch (error) {
         return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
@@ -102,7 +101,7 @@ export const DELETE = async (request, { params }) => {
     const { raffleId } = await request.json();
     try {
         await connectToDB();
-        const raffle = await Raffle.findByIdAndDelete(raffleId);
+        const raffle = await Raffle.findByIdAndDelete(raffleId).populate("tickets.userId");
         
         return new Response(JSON.stringify(raffle.tickets), { status: 200 });
     } catch (error) {

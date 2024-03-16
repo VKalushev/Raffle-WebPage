@@ -14,15 +14,21 @@ import Link from "next/link";
     const [selectedOption, setSelectedOption] = useState('random_raffle');
     const [message, setMessage] = useState(null);
     const [luckyNumber, setLuckyNumber] = useState('');
+    const [raffleWinner, setRaffleWinner] = useState('');
     const [countDownText, setcountDownText] = useState('');
     const [isExpired, setIsExpired] = useState(false);
     const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
     const [participantsCount, setParticipantsCount] = useState(raffle.participants);
+    const [isWinnerDrawn, setIsWinnerDrawn] = useState(false);
     const router = useRouter();
     
     useEffect(() => {
       if (countDownText === "Expired") {
         setIsExpired(true);
+        if(!isWinnerDrawn) {
+          drawWinner();
+          setIsWinnerDrawn(true);
+        }
       }
     }, [countDownText]);
 
@@ -30,6 +36,49 @@ import Link from "next/link";
       setTicketsCount(raffle.tickets.length);
       setParticipantsCount(raffle.participants);
     }, [raffle]);
+
+    const drawWinner = async () => {  
+      try {
+        const response = await fetch(`/api/raffles/${raffle._id}/draw_winner`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            raffleId: raffle._id,
+            }),
+        });
+
+        let {tickets} = await response.json();
+        
+        // setRaffleWinner(winnerString)
+        let user_response = undefined
+        while (tickets.length > 0){
+          try {
+            user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+              method: "PATCH",
+              body: JSON.stringify({
+                tickets: tickets,
+                }),
+            });
+
+            if(response.ok){
+              tickets = await user_response.json()
+            } else {
+              console.log('There was an issue with the User API')
+              break;
+            }
+            
+          } catch (error) {
+            console.log(error)
+            break;
+          }
+        }
+        if(user_response && user_response.ok){
+          onRaffleCardUpdate(/* updated data */);
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
     const handleOptionChange = (e) => {
       setSelectedOption(e.target.value);
@@ -44,8 +93,6 @@ import Link from "next/link";
     };
     
     const handleEdit = () => {
-      // router.push(`/raffle/${raffle._id}/edit?id=${raffle._id}`);
-      // router.push(`/raffle/${raffle._id}/edit?reward=${raffle.winning_prize}&time=${raffle.draw_date}&price=${raffle.entry_price}`);
       router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
     }
 
@@ -71,7 +118,13 @@ import Link from "next/link";
                   tickets: tickets,
                   }),
               });
-              tickets = await user_response.json()
+
+              if(response.ok){
+                tickets = await user_response.json()
+              } else {
+                console.log('There was an issue with the User API')
+                break;
+              }
               
             } catch (error) {
               console.log(error)
@@ -169,37 +222,47 @@ import Link from "next/link";
           <div className="text-red-600 text-2xl border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
             <p>${raffle.entry_price} per ticket</p>
           </div>
-  
-          <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
-            <RadioButton
-              id={0}
-              value="random_raffle"
-              checked={selectedOption === 'random_raffle'}
-              onChange={handleOptionChange}
-              label="Random Raffle"
-              disabled={isExpired}
-            />
-            <RadioButton
-              id={1}
-              value="lucky_number"
-              checked={selectedOption === 'lucky_number'}
-              onChange={handleOptionChange}
-              label="Enter Lucky Number"
-              disabled={isExpired}
-            />
-          </div>
-  
-          {selectedOption === 'random_raffle' ? (
-            <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
-              <span>Enter amount of Tickets:</span>
-              <NumberInput value={ticketCount} onChange={handleTicketChange} disabled={isExpired}/>
+
+          {!isExpired ?(
+            <div>
+              <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
+              <RadioButton
+                id={0}
+                value="random_raffle"
+                checked={selectedOption === 'random_raffle'}
+                onChange={handleOptionChange}
+                label="Random Raffle"
+                disabled={isExpired}
+              />
+              <RadioButton
+                id={1}
+                value="lucky_number"
+                checked={selectedOption === 'lucky_number'}
+                onChange={handleOptionChange}
+                label="Enter Lucky Number"
+                disabled={isExpired}
+              />
+              </div>
+    
+              {selectedOption === 'random_raffle' ? (
+                <div className="flex-center gap-5 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
+                  <span>Enter amount of Tickets:</span>
+                  <NumberInput value={ticketCount} onChange={handleTicketChange} disabled={isExpired}/>
+                </div>
+              ) : (
+                <div className="flex-center gap-2 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
+                  <span>Enter lucky Number:</span>
+                  <input value={luckyNumber} onChange={handleInputChange} className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none" disabled={isExpired} />
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="flex-center gap-2 border-b-2 border-b-black p-2 ml-5 mr-5 text-center">
-              <span>Enter lucky Number:</span>
-              <input value={luckyNumber} onChange={handleInputChange} className="px-1 py-0 w-12 text-center border border-gray-300 rounded-md focus:outline-none" disabled={isExpired} />
+          ): (
+            <div>
+              <div className="flex-center gap-5 ml-5 mr-5 text-center">Winner/s:</div>
+              <div className="flex-center gap-5 border-b-2 border-b-black  ml-5 mr-5 text-center">{raffle.winner}</div>
             </div>
           )}
+          
   
           <div className="flex-center m-1">
             <button className="raffle_btn" onClick={handleEnterRaffleButton} disabled={isExpired}>

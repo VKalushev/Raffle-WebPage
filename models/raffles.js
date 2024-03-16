@@ -29,9 +29,21 @@ const RaffleSchema = new Schema({
     type: Date,
     required: [true, 'Draw date is required.'],
   },
+  is_sharable:{
+    type: Boolean,
+    default: false,
+  },
   participants:{
     type: Number,
     default: 0,
+  },
+  archived:{
+    type: Boolean,
+    default: false,
+  },
+  winner:{
+    type: String,
+    default: ""
   },
   tickets: [TicketSchema]
 });

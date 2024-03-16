@@ -12,10 +12,10 @@ export const PATCH = async (request, { params }) => {
         
         if(userId){
             user = await User.findById(userId);
-        } else{
-            user = await User.findById(tickets[0].userId);
+        } else {
+            user = await User.findById(tickets[0].userId._id);
         }
-        
+            
         if (!user) {
             return new Response("User not found", { status: 404 });
         }
@@ -56,7 +56,7 @@ export const PATCH = async (request, { params }) => {
         } else {
             for (let i = 0; i < tickets.length; i++) {
                 const ticket = tickets[i];
-                const first_userId_string = ticket.userId.toString()
+                const first_userId_string = ticket.userId._id.toString()
                 const second_userId_string = user._id.toString()
                 if(first_userId_string === second_userId_string){
                     for (let k = 0; k < user.tickets.length; k++) {
