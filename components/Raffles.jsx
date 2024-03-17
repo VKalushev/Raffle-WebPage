@@ -29,12 +29,6 @@ const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
 
 const Raffles = ({allRaffles, fetchRaffles, session}) => {
   const [creatingRaffle, setCreatingRaffle] = useState(false);
-
-
-  useEffect(() => {
-    fetchRaffles();
-  }, []);
-
   
   const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
     try { 

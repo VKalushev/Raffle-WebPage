@@ -6,7 +6,6 @@ export const POST = async (request) => {
     
     try {
         await connectToDB()
-        console.log(isSharable)
         try {
 
             await Raffle.create({
