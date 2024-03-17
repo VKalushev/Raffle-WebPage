@@ -36,7 +36,7 @@ export const PATCH = async (request, { params }) => {
     try {
         await connectToDB();
         let winners = ""
-        const raffle = await Raffle.findById(raffleId);
+        const raffle = await Raffle.findById(raffleId).populate("tickets.userId");
         if(raffle.tickets){
             const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
             const winningTicket = raffle.tickets[winningIndex]
@@ -45,7 +45,6 @@ export const PATCH = async (request, { params }) => {
                 if(winningTicket.luckyNumber){
                     for (let i = 1; i < raffle.tickets.length; i++) {
                         const currentWinner = raffle.tickets[i].userId.username;
-                        console.log(currentWinner)
                         if(i + 1 === raffle.tickets.length){
                             winners += ` and ${currentWinner}`;
                         } else {
@@ -58,11 +57,12 @@ export const PATCH = async (request, { params }) => {
             winners = "No Participants"
         }
             
-        raffle.winners = winners;
+        raffle.winner = winners;
         raffle.archived = true;
         await raffle.save();
         return new Response(JSON.stringify({tickets: raffle.tickets}), { status: 200 })
     } catch (error) {
+        console.log(error)
         return new Response(JSON.stringify("Error with the drawing a winner for the raffle"), { status: 500 });
     }
 };
