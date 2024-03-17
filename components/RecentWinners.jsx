@@ -50,15 +50,15 @@ const RecentWinners = ({allRaffles, session}) => {
     
 
     return (
-        <div>
+        <div className=" mx-20">
             {winners.length > 0 &&(
-                <div className="leaderboard-image border border-gray-300 rounded p-4 m-10 w-auto">
+                <div className="leaderboard-image border border-gray-300 rounded p-4 m-10 w-auto overflow-auto max-h-96">
                     <div className="font-bold text-lg mb-3 text-white">Winners From the last 7 days</div>
                     <div className="grid grid-cols-4 gap-2">
-                        <div className="bg-gray-200 p-3 rounded-md">Username</div>
-                        <div className="bg-gray-200 p-3 rounded-md">Prize</div>
-                        <div className="bg-gray-200 p-3 rounded-md">Out of Total Participants</div>
-                        <div className="bg-gray-200 p-3 rounded-md">Draw Date</div>
+                        <div className="bg-gray-400 p-3 rounded-md">Username</div>
+                        <div className="bg-gray-400 p-3 rounded-md">Prize</div>
+                        <div className="bg-gray-400 p-3 rounded-md">Out of Total Participants</div>
+                        <div className="bg-gray-400 p-3 rounded-md">Draw Date</div>
                     {winners.map((winner, index) => (
                         <React.Fragment key={index}>
                         <div className="bg-white p-3 rounded-md">{winner.username}</div>

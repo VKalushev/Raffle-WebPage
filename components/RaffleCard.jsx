@@ -8,7 +8,7 @@ import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
 import Link from "next/link";
   
-  const RaffleCard = ({ raffle, onRaffleCardUpdate }) => {
+  const RaffleCard = ({ raffle, onRaffleCardUpdate, onCreateNewRaffle, archive }) => {
     const { data: session } = useSession();
     const [ticketCount, setTicketCount] = useState(1);
     const [selectedOption, setSelectedOption] = useState('random_raffle');
@@ -22,11 +22,10 @@ import Link from "next/link";
     const router = useRouter();
     
     useEffect(() => {
-      if (countDownText === "Expired") {
+      if (countDownText === "Expired" && !isExpired) {
         setIsExpired(true);
-        if(!isWinnerDrawn) {
+        if(!isWinnerDrawn && !archive) {
           drawWinner();
-          setIsWinnerDrawn(true);
         }
       }
     }, [countDownText]);
@@ -47,7 +46,6 @@ import Link from "next/link";
 
         let {tickets} = await response.json();
         
-        // setRaffleWinner(winnerString)
         let user_response = undefined
         while (tickets.length > 0){
           try {
@@ -70,15 +68,21 @@ import Link from "next/link";
             break;
           }
         }
-        if(user_response && user_response.ok){
+        if(user_response && user_response.ok && !archive){
           onRaffleCardUpdate(/* updated data */);
+          setIsWinnerDrawn(true);
+          const raffleDrawDate = new Date(raffle.draw_date);
+          const nextDay = new Date(raffleDrawDate);
+          nextDay.setDate(raffleDrawDate.getDate() + 1);
+          onCreateNewRaffle(raffle.winning_prize,nextDay,raffle.entry_price,raffle.is_sharable);
+          // reward, time, ticketPrice, isSharable
         }
 
       } catch (error) {
         console.log(error)
       }
     }
-    // console.log(raffle.is_sharable)
+
     const handleOptionChange = (e) => {
       setSelectedOption(e.target.value);
     };

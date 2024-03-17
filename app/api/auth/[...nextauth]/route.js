@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import bcrypt from 'bcrypt';
 
 import User from '@models/user';
 import { connectToDB, getUserFromDatabase } from '@utils/database';
@@ -19,24 +20,19 @@ const handler = NextAuth({
       async authorize(credentials, req) {
         const { email, password } = credentials;
         try {
-          // Check if user exists in the database
           const user = await User.findOne({ email });
           if (user) {
-            // If user exists, check if the password matches
-            if (user.password === password) {
-              // Return the user object if authentication is successful
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (passwordMatch) {
               return user;
             } else {
-              // Return null if the password is incorrect
               return null;
             }
           } else {
-            // Return null if user does not exist
             return null;
           }
         } catch (error) {
           console.error("Error during authorization:", error);
-          // Return null if an error occurs
           return null;
         }
       }

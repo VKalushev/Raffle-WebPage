@@ -79,8 +79,6 @@ export const PATCH = async (request, { params }) => {
                 }
             }
         }
-        // console.log(user.tickets)
-        // console.log(tickets)
         let response_tickets = [];
         if(newTickets.length > 0){
             response_tickets = newTickets
