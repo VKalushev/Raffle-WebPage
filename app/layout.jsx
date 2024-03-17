@@ -2,8 +2,7 @@ import Footer from '@components/Footer';
 import Nav from '@components/Nav';
 import Provider from '@components/Provider';
 import '@styles/globals.css';
-// import { Children } from 'react';
-//
+
 export const metadata = {
     title: 'RaffleWebsite',
     desciption: 'Win easy rewards'

@@ -8,7 +8,7 @@ import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
 import Link from "next/link";
   
-  const RaffleCard = ({ raffle, onRaffleCardUpdate }) => {
+  const RaffleCard = ({ raffle, onRaffleCardUpdate, onCreateNewRaffle }) => {
     const { data: session } = useSession();
     const [ticketCount, setTicketCount] = useState(1);
     const [selectedOption, setSelectedOption] = useState('random_raffle');
@@ -27,6 +27,10 @@ import Link from "next/link";
         if(!isWinnerDrawn) {
           drawWinner();
           setIsWinnerDrawn(true);
+          const raffleDrawDate = new Date(raffle.draw_date);
+          const nextDay = new Date(raffleDrawDate);
+          nextDay.setDate(raffleDrawDate.getDate() + 1);
+          onCreateNewRaffle(raffle.winning_prize,nextDay,raffle.entry_price,raffle.is_sharable);
         }
       }
     }, [countDownText]);
@@ -47,7 +51,6 @@ import Link from "next/link";
 
         let {tickets} = await response.json();
         
-        // setRaffleWinner(winnerString)
         let user_response = undefined
         while (tickets.length > 0){
           try {
@@ -72,6 +75,7 @@ import Link from "next/link";
         }
         if(user_response && user_response.ok){
           onRaffleCardUpdate(/* updated data */);
+          // reward, time, ticketPrice, isSharable
         }
 
       } catch (error) {

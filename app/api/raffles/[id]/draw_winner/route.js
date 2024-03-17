@@ -1,35 +1,6 @@
 import { connectToDB } from "@utils/database";
 import Raffle from '@models/raffles';
 
-export const GET = async (request, { params }) => {
-    try {
-        await connectToDB()
-
-        let winners = []
-        const raffle = await Raffle.findById(params.id).populate("tickets.userId")
-        const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
-        const winningTicket = raffle.tickets[winningIndex]
-        if(winningTicket) {
-        // winners.push(winningTicket.userId.username.toString());
-        
-        if(winningTicket.luckyNumber){
-            raffle.tickets.forEach(ticket => {
-                if(ticket.luckyNumber){
-                    if(ticket.luckyNumber === winningTicket.luckyNumber){
-                        winners.push(ticket.userId.username.toString())
-                    }
-                }
-            });
-        }
-        }
-
-        return new Response(JSON.stringify({winner: winners, tickets: raffle.tickets}), { status: 200 })
-    } catch (error) {
-        console.log(error)
-        return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
-    }
-} 
-
 export const PATCH = async (request, { params }) => {
     const { raffleId } = await request.json();
 
@@ -37,6 +8,8 @@ export const PATCH = async (request, { params }) => {
         await connectToDB();
         let winners = ""
         const raffle = await Raffle.findById(raffleId).populate("tickets.userId");
+        console.log(raffle.tickets)
+        console.log(raffle)
         if(raffle.tickets){
             const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
             const winningTicket = raffle.tickets[winningIndex]

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import RaffleCard from "./RaffleCard";
 import CreateRaffle from "./CreateRaffle";
 
-const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
+const PromptRaffleList = ({ data, onRaffleCardUpdate, createNewRaffle }) => {
   // Check if data exists and is not empty
   if (!data || data.length === 0) {
     return null; // or you can render a placeholder, message, or any other UI element
@@ -21,6 +21,7 @@ const PromptRaffleList = ({ data, onRaffleCardUpdate }) => {
           key={raffle._id}
           raffle={raffle}
           onRaffleCardUpdate={onRaffleCardUpdate}
+          onCreateNewRaffle={createNewRaffle}
         />
       ))}
     </div>
@@ -93,7 +94,7 @@ const Raffles = ({allRaffles, fetchRaffles, session}) => {
        {/* <div className="mb-20"><RaffleCard ></RaffleCard></div> */}
        { allRaffles.length > 0 &&(
         <div>
-        <PromptRaffleList data={allRaffles} onRaffleCardUpdate={fetchRaffles}/>
+        <PromptRaffleList data={allRaffles} onRaffleCardUpdate={fetchRaffles} createNewRaffle={handleConfirmButton}/>
         </div>
        )}
       
