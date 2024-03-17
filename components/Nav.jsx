@@ -24,10 +24,18 @@ const Nav = () => {
     
     <nav className='flex-between w-full mb-3'>
 
-            <Link href='/' className="">
+            <div className="flex ">
+            <Link href='/'>
                 <Image src="/assets/logos/logo5.png" alt="Logo" width={100} height={100} className="object-contain"/>
             </Link>
-
+            <Link href='/archive' className="nav-links ml-1" >
+                <p>Archive</p>
+            </Link>
+            <Link href='/archive' className="nav-links" >
+                <p>Redeem Rewards</p>
+            </Link>
+            </div>
+            
             {/* Desktop Navigation */}
             <div className='sm:flex hidden'>
                 {session?.user ? (

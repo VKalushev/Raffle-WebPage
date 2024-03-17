@@ -18,7 +18,6 @@ const EditPage = () => {
 
   const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
     if (window.confirm("Are you sure you want to save the changes?")) {
-      console.log(isSharable)  
   
       try { 
         const response = await fetch(`/api/raffles/${raffle._id}`, {

@@ -29,7 +29,7 @@ const Home = () => {
             <p className="desc text-center">Participate in our exciting raffles and stand a chance to win amazing prizes! Multiple games every hour with the opportunity to enter multiple times and even with your lucky numbers. </p>
     </section>
     <RecentWinners allRaffles={allRaffles} session={session}/>
-    <Raffles session={session} allRaffles={allRaffles} fetchRaffles={fetchRaffles}/>
+    <Raffles session={session} allRaffles={allRaffles} fetchRaffles={fetchRaffles} archive={false}/>
     </div>
   )
 }

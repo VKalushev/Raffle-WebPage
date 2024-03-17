@@ -97,6 +97,10 @@
   @apply relative z-10 flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
 }
 
+.nav-links {
+  @apply flex-center text-2xl hover:text-orange-400 border-r-2 p-2 my-5 border-gray-300
+}
+
 .black_btn {
   @apply rounded-full border border-black bg-black py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-inter flex items-center justify-center;
 }
@@ -118,7 +122,7 @@
 }
 
 .prompt_layout {
-  @apply space-y-6 py-8  sm:columns-2 sm:gap-6 xl:columns-3;
+  @apply space-y-6 py-8 mx-20 sm:columns-2 sm:gap-6 xl:columns-3;
 }
 
 .leaderboard {
