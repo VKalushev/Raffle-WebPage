@@ -1,15 +1,19 @@
 import { Schema, model, models, mongoose } from 'mongoose';
 
 const TicketSchema = new Schema({
-  raffleId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Raffle',
-    required: true
-  },
   luckyNumber: {
     type: Number
   }
 });
+
+const ReceiptSchema = new Schema({
+    raffleId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Raffle',
+      required: true
+    },
+    tickets: [TicketSchema]
+  });
 
 const UserSchema = new Schema({
   email: {
@@ -35,7 +39,8 @@ const UserSchema = new Schema({
     type: String,
     default: 'Normal'
   },
-  tickets: [TicketSchema]
+  winning_receipts: [ReceiptSchema],
+  receipts: [ReceiptSchema]
 });
 
 const User = models.User || model("User", UserSchema);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect} from "react";
+import { Suspense } from 'react';
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
@@ -35,6 +36,26 @@ import Link from "next/link";
       setParticipantsCount(raffle.participants);
     }, [raffle]);
 
+    const handleOptionChange = (e) => {
+      setSelectedOption(e.target.value);
+    };
+
+    const handleInputChange = (e) => {
+      setLuckyNumber(e.target.value);
+    };
+
+    const handleTicketChange = (newValue) => {
+      setTicketCount(newValue);
+    };
+
+    const handleOpenRafflePage = () => {
+      router.push(`/raffle/${raffle._id}`);
+    }
+
+    const handleEdit = () => {
+      router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
+    }
+
     const drawWinner = async () => {  
       try {
         const response = await fetch(`/api/raffles/${raffle._id}/draw_winner`, {
@@ -44,20 +65,25 @@ import Link from "next/link";
             }),
         });
 
-        let {tickets} = await response.json();
+        let {uniqueUserIds,winnerUserIDandTicket} = await response.json();
         
         let user_response = undefined
-        while (tickets.length > 0){
+        
+        while (uniqueUserIds.length > 0){
           try {
-            user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+            user_response = await fetch(`/api/user/${uniqueUserIds[0]}/tickets`, {
               method: "PATCH",
               body: JSON.stringify({
-                tickets: tickets,
+                userId: uniqueUserIds[0].toString(),
+                raffle: raffle,
+                winnerUserIDandTicket: winnerUserIDandTicket,
+                is_adding_new_tickets: false,
                 }),
             });
 
             if(response.ok){
-              tickets = await user_response.json()
+              uniqueUserIds.splice(0,1)
+              winnerUserIDandTicket = await user_response.json()
             } else {
               console.log('There was an issue with the User API')
               break;
@@ -67,6 +93,24 @@ import Link from "next/link";
             console.log(error)
             break;
           }
+        }
+        console.log(winnerUserIDandTicket)
+
+        let winnings_response = undefined;
+        try {
+          winnerUserIDandTicket.forEach(async winner => {
+            winnings_response = await fetch(`/api/winnings`, {
+              method: "POST",
+              body: JSON.stringify({
+                winner: winner,
+                winning_prize: raffle.winning_prize,
+                raffleId: raffle._id,
+                }),
+            });
+          });
+
+        } catch (error) {
+          console.log(error)
         }
         if(user_response && user_response.ok && !archive){
           onRaffleCardUpdate(/* updated data */);
@@ -83,21 +127,6 @@ import Link from "next/link";
       }
     }
 
-    const handleOptionChange = (e) => {
-      setSelectedOption(e.target.value);
-    };
-
-    const handleInputChange = (e) => {
-      setLuckyNumber(e.target.value);
-    };
-
-    const handleTicketChange = (newValue) => {
-      setTicketCount(newValue);
-    };
-    
-    const handleEdit = () => {
-      router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
-    }
 
     const handleDelete = async (e) => {
       
@@ -110,20 +139,21 @@ import Link from "next/link";
             }),
           });
           
-
-          let tickets = await response.json();
-          let user_response = undefined;
-          while (tickets.length > 0){
+          let uniqueUserIds = await response.json();
+          let user_response = undefined; 
+          while (uniqueUserIds.length > 0){
             try {
-              user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+              user_response = await fetch(`/api/user/${uniqueUserIds[0]}/tickets`, {
                 method: "PATCH",
                 body: JSON.stringify({
-                  tickets: tickets,
+                  userId: uniqueUserIds[0].toString(),
+                  raffle: raffle,
+                  is_adding_new_tickets: false,
                   }),
               });
 
               if(response.ok){
-                tickets = await user_response.json()
+                uniqueUserIds.splice(0,1)
               } else {
                 console.log('There was an issue with the User API')
                 break;
@@ -145,9 +175,6 @@ import Link from "next/link";
       }
     };
 
-    const handleOpenRafflePage = () => {
-      router.push(`/raffle/${raffle._id}`);
-    }
 
     const handleEnterRaffleButton  = async (e) => {
       e.preventDefault();
@@ -156,15 +183,17 @@ import Link from "next/link";
       let body = {}
       if(selectedOption === 'random_raffle'){
         body = {
-          raffleId: raffle._id,
+          raffle: raffle,
           userId: userId,
           amountOfTickets: ticketCount,
+          is_adding_new_tickets: true,
           }
       } else {
         body = {
           raffle: raffle,
           userId: userId,
           luckyNumber: luckyNumber,
+          is_adding_new_tickets: true,
           }
       }
 
@@ -180,9 +209,9 @@ import Link from "next/link";
             const raffle_response = await fetch(`/api/raffles/${raffle._id}`, {
               method: "PATCH",
               body: JSON.stringify({
-              raffleId: raffle._id,
-              userId: userId,
-              tickets: tickets,
+                raffleId: raffle._id,
+                userId: userId,
+                tickets: tickets,
               }),
             });
             
@@ -212,9 +241,11 @@ import Link from "next/link";
             <span className="reward-box">Sharable: {raffle.is_sharable.toString()}</span>
             
           </div>
+          <Suspense fallback={<button>Enter Button</button>}>
           <h3 className="p-14 text-center text-xl">
           <Countdown drawDate={raffle.draw_date} onStatusChange={setcountDownText} />
           </h3>
+          </Suspense>
         </header>
   
         <div className="text-sm text-center border-b-2 border-b-black ml-5 mr-5 p-2">
@@ -268,9 +299,11 @@ import Link from "next/link";
           
   
           <div className="flex-center m-1">
+          <Suspense fallback={<button>Enter Button</button>}>
             <button className="raffle_btn" onClick={handleEnterRaffleButton} disabled={isExpired}>
               Enter Raffle
             </button>
+          </Suspense>
             {session?.user.role === "Admin" && (
               <div className='flex gap'>
                 <button className='raffle_btn' onClick={handleEdit}>Edit</button>

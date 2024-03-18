@@ -6,20 +6,21 @@ export const POST = async (request) => {
     try {
         await connectToDB()
         const { email, username, password } = await request.json();
-
         const emailUserExists = await User.findOne({ email });
         const userExists = await User.findOne({ username });
-
         if (!userExists && !emailUserExists) {
             try {
                 const hashedPassword = await bcrypt.hash(password, 10);
-
-                await User.create({
-                    email: email,
-                    username: username,
-                    password: hashedPassword,
-                  });
-
+                try {
+                    await User.create({
+                        email: email,
+                        username: username,
+                        password: hashedPassword,
+                    });
+                } catch (error) {
+                    console.log(error)
+                }
+                
                 return new Response("User Successfully created", { status: 201 });
             }   catch (error) {
                 return new Response("Failed to create new user", { status: 500 });
@@ -33,6 +34,7 @@ export const POST = async (request) => {
         } 
         return new Response("Failed to create new user", { status: 500 });
     } catch (error) {
+        console.log(error)
         return new Response("Failed to create new user", { status: 500 });
     }
 }
