@@ -36,6 +36,26 @@ import Link from "next/link";
       setParticipantsCount(raffle.participants);
     }, [raffle]);
 
+    const handleOptionChange = (e) => {
+      setSelectedOption(e.target.value);
+    };
+
+    const handleInputChange = (e) => {
+      setLuckyNumber(e.target.value);
+    };
+
+    const handleTicketChange = (newValue) => {
+      setTicketCount(newValue);
+    };
+
+    const handleOpenRafflePage = () => {
+      router.push(`/raffle/${raffle._id}`);
+    }
+
+    const handleEdit = () => {
+      router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
+    }
+
     const drawWinner = async () => {  
       try {
         const response = await fetch(`/api/raffles/${raffle._id}/draw_winner`, {
@@ -48,6 +68,7 @@ import Link from "next/link";
         let {uniqueUserIds,winnerUserIDandTicket} = await response.json();
         
         let user_response = undefined
+        
         while (uniqueUserIds.length > 0){
           try {
             user_response = await fetch(`/api/user/${uniqueUserIds[0]}/tickets`, {
@@ -62,6 +83,7 @@ import Link from "next/link";
 
             if(response.ok){
               uniqueUserIds.splice(0,1)
+              winnerUserIDandTicket = await user_response.json()
             } else {
               console.log('There was an issue with the User API')
               break;
@@ -71,6 +93,24 @@ import Link from "next/link";
             console.log(error)
             break;
           }
+        }
+        console.log(winnerUserIDandTicket)
+
+        let winnings_response = undefined;
+        try {
+          winnerUserIDandTicket.forEach(async winner => {
+            winnings_response = await fetch(`/api/winnings`, {
+              method: "POST",
+              body: JSON.stringify({
+                winner: winner,
+                winning_prize: raffle.winning_prize,
+                raffleId: raffle._id,
+                }),
+            });
+          });
+
+        } catch (error) {
+          console.log(error)
         }
         if(user_response && user_response.ok && !archive){
           onRaffleCardUpdate(/* updated data */);
@@ -87,21 +127,6 @@ import Link from "next/link";
       }
     }
 
-    const handleOptionChange = (e) => {
-      setSelectedOption(e.target.value);
-    };
-
-    const handleInputChange = (e) => {
-      setLuckyNumber(e.target.value);
-    };
-
-    const handleTicketChange = (newValue) => {
-      setTicketCount(newValue);
-    };
-    
-    const handleEdit = () => {
-      router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
-    }
 
     const handleDelete = async (e) => {
       
@@ -150,9 +175,6 @@ import Link from "next/link";
       }
     };
 
-    const handleOpenRafflePage = () => {
-      router.push(`/raffle/${raffle._id}`);
-    }
 
     const handleEnterRaffleButton  = async (e) => {
       e.preventDefault();

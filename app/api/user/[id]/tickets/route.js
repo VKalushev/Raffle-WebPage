@@ -65,15 +65,25 @@ export const PATCH = async (request, { params }) => {
                     winnerUserIDandTicket.forEach(winningUser => {
                         if(winningUser.userId.toString() === userId){
                             user.winning_receipts = receipt;
+
                         }
+
                     });
+                    for (let i = 0; i < winnerUserIDandTicket.length; i++) {
+                        const currentWinner = winnerUserIDandTicket[i]
+                        if(currentWinner.userId.toString() === userId){
+                            user.winning_receipts = receipt;
+                            winnerUserIDandTicket[i] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                        }
+                    }
                     user.receipts.splice(i,1)
                     i -=1;
                 }
                 
             }
+            console.log(winnerUserIDandTicket)
             await user.save();
-            return new Response(JSON.stringify("User Receipt Deleted Successfully"), { status: 200 });
+            return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
         }
 
 

@@ -14,13 +14,14 @@ export const PATCH = async (request, { params }) => {
             const winningTicket = raffle.tickets[winningIndex]
             
             winnerUserIDandTicket.push({userId:winningTicket.userId._id.toString(), ticketId: winningTicket._id.toString()});
+            const originalWinnerName = winningTicket.userId.username.toString();
             winners = winningTicket.userId.username.toString();
 
             if(winningTicket.luckyNumber){
                 for (let i = 0; i < raffle.tickets.length; i++) {
                     const currentTicket = raffle.tickets[i];
                     if(currentTicket.luckyNumber){
-                        if(currentTicket.luckyNumber.toString() === winningTicket.luckyNumber.toString() && currentTicket.userId.username.toString() !== winners){
+                        if(currentTicket.luckyNumber.toString() === winningTicket.luckyNumber.toString() && currentTicket.userId.username.toString() !== originalWinnerName){
                             winnerUserIDandTicket.push({userId:currentTicket.userId._id.toString(), ticketId: currentTicket._id.toString()});
                             if(i + 1 === raffle.tickets.length){
                                 winners += ` and ${currentTicket.userId.username}`;
