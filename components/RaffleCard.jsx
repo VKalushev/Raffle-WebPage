@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect} from "react";
+import { Suspense } from 'react';
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
@@ -44,20 +45,23 @@ import Link from "next/link";
             }),
         });
 
-        let {tickets} = await response.json();
+        let {uniqueUserIds,winnerUserIDandTicket} = await response.json();
         
         let user_response = undefined
-        while (tickets.length > 0){
+        while (uniqueUserIds.length > 0){
           try {
-            user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+            user_response = await fetch(`/api/user/${uniqueUserIds[0]}/tickets`, {
               method: "PATCH",
               body: JSON.stringify({
-                tickets: tickets,
+                userId: uniqueUserIds[0].toString(),
+                raffle: raffle,
+                winnerUserIDandTicket: winnerUserIDandTicket,
+                is_adding_new_tickets: false,
                 }),
             });
 
             if(response.ok){
-              tickets = await user_response.json()
+              uniqueUserIds.splice(0,1)
             } else {
               console.log('There was an issue with the User API')
               break;
@@ -110,22 +114,21 @@ import Link from "next/link";
             }),
           });
           
-
-          let uniqueIDs = await response.json();
-          let user_response = undefined;
-          while (uniqueIDs.length > 0){
+          let uniqueUserIds = await response.json();
+          let user_response = undefined; 
+          while (uniqueUserIds.length > 0){
             try {
-              user_response = await fetch(`/api/user/${uniqueIDs[0].userId}/tickets`, {
+              user_response = await fetch(`/api/user/${uniqueUserIds[0]}/tickets`, {
                 method: "PATCH",
                 body: JSON.stringify({
-                  userId: uniqueIDs[0],
+                  userId: uniqueUserIds[0].toString(),
                   raffle: raffle,
                   is_adding_new_tickets: false,
                   }),
               });
 
               if(response.ok){
-                uniqueIDs.splice(0,1)
+                uniqueUserIds.splice(0,1)
               } else {
                 console.log('There was an issue with the User API')
                 break;
@@ -216,9 +219,11 @@ import Link from "next/link";
             <span className="reward-box">Sharable: {raffle.is_sharable.toString()}</span>
             
           </div>
+          <Suspense fallback={<button>Enter Button</button>}>
           <h3 className="p-14 text-center text-xl">
           <Countdown drawDate={raffle.draw_date} onStatusChange={setcountDownText} />
           </h3>
+          </Suspense>
         </header>
   
         <div className="text-sm text-center border-b-2 border-b-black ml-5 mr-5 p-2">
@@ -272,9 +277,11 @@ import Link from "next/link";
           
   
           <div className="flex-center m-1">
+          <Suspense fallback={<button>Enter Button</button>}>
             <button className="raffle_btn" onClick={handleEnterRaffleButton} disabled={isExpired}>
               Enter Raffle
             </button>
+          </Suspense>
             {session?.user.role === "Admin" && (
               <div className='flex gap'>
                 <button className='raffle_btn' onClick={handleEdit}>Edit</button>

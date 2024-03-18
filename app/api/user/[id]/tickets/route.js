@@ -3,7 +3,7 @@ import User from '@models/user';
 import mongoose from "mongoose";
 
 export const PATCH = async (request, { params }) => {
-    const { userId, amountOfTickets, luckyNumber, is_adding_new_tickets, raffle} = await request.json();
+    const { userId, amountOfTickets, luckyNumber, is_adding_new_tickets, raffle, winnerUserIDandTicket} = await request.json();
 
     try {
         await connectToDB();
@@ -22,11 +22,10 @@ export const PATCH = async (request, { params }) => {
                     for (let i = 0; i < raffle.tickets.length; i++) {
                         const currentTicket = raffle.tickets[i];
                         if(currentTicket.luckyNumber){
-                            console.log("Test 1")
                             if (luckyNumber.toString() === currentTicket.luckyNumber.toString()) {
-                                if(currentTicket.userId != userId && !raffle.is_sharable){
+                                if(currentTicket.userId.toString() != userId.toString() && !raffle.is_sharable){
                                     return new Response(JSON.stringify("Sorry but Number has been picked by another user"), { status: 500 });
-                                } else {
+                                } else if(currentTicket.userId.toString() === userId.toString()) {
                                     return new Response(JSON.stringify("You already have that lucky number for this raffle"), { status: 500 });
                     
                                 }
@@ -61,8 +60,13 @@ export const PATCH = async (request, { params }) => {
         } else {
             for (let i = 0; i < user.receipts.length; i++) {
                 const receipt = user.receipts[i];
-
+     
                 if(receipt.raffleId.toString() === raffle._id.toString()){
+                    winnerUserIDandTicket.forEach(winningUser => {
+                        if(winningUser.userId.toString() === userId){
+                            user.winning_receipts = receipt;
+                        }
+                    });
                     user.receipts.splice(i,1)
                     i -=1;
                 }
