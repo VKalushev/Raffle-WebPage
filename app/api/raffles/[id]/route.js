@@ -96,6 +96,7 @@ export const PATCH = async (request, { params }) => {
             return new Response("Error Updating Prompt", { status: 500 });
         }
     } catch (error) {
+        console.log(error)
         return new Response("Error Updating Prompt", { status: 500 });
     }
 };
@@ -105,8 +106,15 @@ export const DELETE = async (request, { params }) => {
     try {
         await connectToDB();
         const raffle = await Raffle.findByIdAndDelete(raffleId).populate("tickets.userId");
+
+        const uniqueUserIds = new Set();
+        raffle.tickets.forEach(ticket => {
+            if (!uniqueUserIds.has(ticket.userId.toString())) {
+                uniqueUserIds.add(ticket.userId.toString());
+            }
+        });
         
-        return new Response(JSON.stringify(raffle.tickets), { status: 200 });
+        return new Response(JSON.stringify(uniqueUserIds), { status: 200 });
     } catch (error) {
         console.log(error)
         return new Response("Error Updating Prompt", { status: 500 });

@@ -17,7 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchRaffles();
-    const intervalId = setInterval(fetchRaffles, 10000  );
+    const intervalId = setInterval(fetchRaffles, 1000  );
      
       return () => clearInterval(intervalId);
     }, []); 

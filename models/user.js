@@ -39,6 +39,7 @@ const UserSchema = new Schema({
     type: String,
     default: 'Normal'
   },
+  winning_receipts: [ReceiptSchema],
   receipts: [ReceiptSchema]
 });
 

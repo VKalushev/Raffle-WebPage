@@ -111,19 +111,21 @@ import Link from "next/link";
           });
           
 
-          let tickets = await response.json();
+          let uniqueIDs = await response.json();
           let user_response = undefined;
-          while (tickets.length > 0){
+          while (uniqueIDs.length > 0){
             try {
-              user_response = await fetch(`/api/user/${tickets[0].userId}/tickets`, {
+              user_response = await fetch(`/api/user/${uniqueIDs[0].userId}/tickets`, {
                 method: "PATCH",
                 body: JSON.stringify({
-                  tickets: tickets,
+                  userId: uniqueIDs[0],
+                  raffle: raffle,
+                  is_adding_new_tickets: false,
                   }),
               });
 
               if(response.ok){
-                tickets = await user_response.json()
+                uniqueIDs.splice(0,1)
               } else {
                 console.log('There was an issue with the User API')
                 break;
@@ -156,15 +158,17 @@ import Link from "next/link";
       let body = {}
       if(selectedOption === 'random_raffle'){
         body = {
-          raffleId: raffle._id,
+          raffle: raffle,
           userId: userId,
           amountOfTickets: ticketCount,
+          is_adding_new_tickets: true,
           }
       } else {
         body = {
           raffle: raffle,
           userId: userId,
           luckyNumber: luckyNumber,
+          is_adding_new_tickets: true,
           }
       }
 
@@ -180,9 +184,9 @@ import Link from "next/link";
             const raffle_response = await fetch(`/api/raffles/${raffle._id}`, {
               method: "PATCH",
               body: JSON.stringify({
-              raffleId: raffle._id,
-              userId: userId,
-              tickets: tickets,
+                raffleId: raffle._id,
+                userId: userId,
+                tickets: tickets,
               }),
             });
             
