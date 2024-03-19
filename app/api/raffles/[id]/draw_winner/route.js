@@ -9,7 +9,7 @@ export const PATCH = async (request, { params }) => {
         let winners = "";
         const raffle = await Raffle.findById(raffleId).populate("tickets.userId");
         
-        if(raffle.tickets){
+        if(raffle.tickets.length > 0){
             const winningIndex = Math.floor(Math.random() * raffle.tickets.length);
             const winningTicket = raffle.tickets[winningIndex]
             

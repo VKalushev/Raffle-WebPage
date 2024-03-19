@@ -35,11 +35,7 @@ const RecentWinners = ({allRaffles, session}) => {
     };
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        const formattedTime = `${date.getHours()}:${date.getMinutes()}`;
-    
-        return `${formattedDate} ${formattedTime}`;
+        return new Date(dateString).toLocaleString();
     };
 
     useEffect(() => {

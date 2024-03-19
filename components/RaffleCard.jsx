@@ -94,7 +94,6 @@ import Link from "next/link";
             break;
           }
         }
-        console.log(winnerUserIDandTicket)
 
         let winnings_response = undefined;
         try {

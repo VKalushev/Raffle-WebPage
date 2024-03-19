@@ -12,6 +12,18 @@ const ReceiptSchema = new Schema({
       ref: 'Raffle',
       required: true
     },
+    winning_prize: {
+      type: String,
+      required: [true, 'Setting a prize is required.'],
+    },
+    draw_date: {
+      type: Date,
+      required: [true, 'Draw date is required.'],
+    },
+    is_claimed:{
+      type: Boolean,
+      default: false,
+    },
     tickets: [TicketSchema]
   });
 

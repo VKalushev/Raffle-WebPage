@@ -32,14 +32,23 @@ export const PATCH = async (request, { params }) => {
 
     try {
         await connectToDB();
-        const user = await Winnings.findById(receiptId);
-            
-        if (!user) {
-            return new Response("User not found", { status: 404 });
+        const winnings = await Winnings.findOne({receiptId: receiptId});
+        console.log(winnings)
+        if (!winnings) {
+            return new Response("No Winnings found", { status: 404 });
+        }
+        console.log("Test 1");
+        if(winnings.userId.toString() === userId.toString()){
+            console.log("Test 2");
+            winnings.is_claimed = true;
+            winnings.save();
+            console.log("Test 3");
+            return new Response(JSON.stringify("Winnings Claimed Successfully"), { status: 200 });
+        } else {
+            console.log("Test 4");
+            return new Response("To claim the reward login with the related account", { status: 500 });
         }
 
-        await user.save();
-        return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
         
     } catch (error) {
         console.log(error)
