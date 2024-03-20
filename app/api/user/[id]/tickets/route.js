@@ -61,32 +61,31 @@ export const PATCH = async (request, { params }) => {
             return new Response(JSON.stringify(newTickets), { status: 200 });
         } else {
             let isWinningReceiptFound = false;
-            for (let k = 0; k < winnerUserIDandTicket.length; k++) {
-                const currentWinner = winnerUserIDandTicket[k]
-                if(currentWinner.userId.toString() === userId){
-                    for (let i = 0; i < user.receipts.length; i++) {
-                        const receipt = user.receipts[i];
-                        if(receipt.raffleId.toString() === raffle._id.toString() && !isWinningReceiptFound){
-                            for (let j = 0; j < receipt.tickets.length; j++) {
-                                const currentTicketID = receipt.tickets[j]._id.toString();
-                                console.log(currentTicketID)
-                                if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
-                                    user.winning_receipts.push(receipt);
-                                    winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
-                                    break
+            for (let i = 0; i < user.receipts.length; i++) {
+                const receipt = user.receipts[i];
+                if(receipt.raffleId.toString() === raffle._id.toString()){
+                    if(!isWinningReceiptFound){
+                        for (let k = 0; k < winnerUserIDandTicket.length; k++) {
+                            const currentWinner = winnerUserIDandTicket[k]
+                            if(currentWinner.userId.toString() === userId){
+                                for (let j = 0; j < receipt.tickets.length; j++) {
+                                    const currentTicketID = receipt.tickets[j]._id.toString();
+                                    if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
+                                        user.winning_receipts.push(receipt);
+                                        winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                                    }
                                 }
                             }
                         }
-                        user.receipts.splice(i,1)
-                        i -=1;
                     }
-
+                    user.receipts.splice(i,1)
+                    i -=1;
                 }
+            }
 
             // console.log(winnerUserIDandTicket)
             await user.save();
             return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
-        }
 
     }
     } catch (error) {

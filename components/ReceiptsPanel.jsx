@@ -80,7 +80,7 @@ const ReceiptsPanel = ({user}) => {
                               {receipt.tickets[0]?.luckyNumber === undefined ? (
                                   <span>Random Tickets</span>
                               ) : (
-                                  <span>Random Tickets</span>
+                                  <span>Lucky Number</span>
                               )}
                           </td>
                           <td className="panel-body">{receipt.tickets.length}</td>
@@ -104,7 +104,7 @@ const ReceiptsPanel = ({user}) => {
                               )}
                           </td>
                           <td className="panel-body">
-                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleRefundReceipt(receipt,index)}>Claim</button>
+                              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleRefundReceipt(receipt,index)}>Refund</button>
                           </td>
                       </tr>
                     )
