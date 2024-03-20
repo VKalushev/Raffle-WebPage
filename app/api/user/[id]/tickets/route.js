@@ -58,13 +58,14 @@ export const PATCH = async (request, { params }) => {
             }
             user.receipts.push(newReceipt)
             await user.save();
-            return new Response(JSON.stringify(newTickets), { status: 200 });
+            console.log(user)
+            return new Response(JSON.stringify({tickets: newTickets, receipt: user.receipts[0]}), { status: 200 });
         } else {
             let isWinningReceiptFound = false;
             for (let i = 0; i < user.receipts.length; i++) {
                 const receipt = user.receipts[i];
                 if(receipt.raffleId.toString() === raffle._id.toString()){
-                    if(!isWinningReceiptFound){
+                    if(!isWinningReceiptFound && winnerUserIDandTicket){
                         for (let k = 0; k < winnerUserIDandTicket.length; k++) {
                             const currentWinner = winnerUserIDandTicket[k]
                             if(currentWinner.userId.toString() === userId){
@@ -73,6 +74,7 @@ export const PATCH = async (request, { params }) => {
                                     if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
                                         user.winning_receipts.push(receipt);
                                         winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                                        break;
                                     }
                                 }
                             }

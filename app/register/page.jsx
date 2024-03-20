@@ -39,9 +39,6 @@ const RegisterPage = () => {
     try { 
       const response = await fetch("/api/user/create", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json", // Set the Content-Type header
-        },
         body: JSON.stringify({
             email: formData.email,
             username: formData.username,

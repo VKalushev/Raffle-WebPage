@@ -5,9 +5,12 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import RecentWinners from '@components/RecentWinners';
 
+
+
 const Home = () => {
   const [allRaffles, setAllRaffles] = useState([]);
   const { data: session } = useSession();
+
 
   const fetchRaffles = async () => {
     const response = await fetch("/api/raffles");
@@ -30,6 +33,7 @@ const Home = () => {
     </section>
     <RecentWinners allRaffles={allRaffles} session={session}/>
     <Raffles session={session} allRaffles={allRaffles} fetchRaffles={fetchRaffles} archive={false}/>
+    
     </div>
   )
 }

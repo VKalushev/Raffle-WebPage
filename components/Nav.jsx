@@ -31,7 +31,7 @@ const Nav = () => {
             <Link href='/archive' className="nav-links ml-1" >
                 <p>Archive</p>
             </Link>
-            <Link href='/archive' className="nav-links" >
+            <Link href='/claim-rewards' className="nav-links" >
                 <p>Redeem Rewards</p>
             </Link>
             </div>

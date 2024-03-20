@@ -7,7 +7,9 @@ import { usePathname, useRouter } from "next/navigation";
 import RadioButton from "./RadioButton";
 import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
-import Link from "next/link";
+import GuestsEnterRaffleModal from "./GuestsEnterRaffleModal";
+
+
   
   const RaffleCard = ({ raffle, onRaffleCardUpdate, onCreateNewRaffle, archive }) => {
     const { data: session } = useSession();
@@ -20,7 +22,19 @@ import Link from "next/link";
     const [ticketsCount, setTicketsCount] = useState(raffle.tickets.length);
     const [participantsCount, setParticipantsCount] = useState(raffle.participants);
     const [isWinnerDrawn, setIsWinnerDrawn] = useState(false);
-    const router = useRouter();
+    const router = useRouter();  
+    const [isOpen, setIsOpen] = useState(false);
+    const [generatedReceipt, setGeneratedReceipt] = useState(null);
+
+    const openModal = () => {
+      setIsOpen(true);
+    };
+  
+    const closeModal = () => {
+      if (window.confirm("Are you sure that you saved you Receipt?")) {
+        setIsOpen(false);
+      }
+    };
     
     useEffect(() => {
       if (countDownText === "Expired" && !isExpired) {
@@ -175,10 +189,10 @@ import Link from "next/link";
     };
 
 
-    const handleEnterRaffleButton  = async (e) => {
+    const handleEnterRaffleButton  = async (e,userId) => {
       e.preventDefault();
 
-      const userId = session.user.id.toString();
+      // const userId = session.user.id.toString();
       let body = {}
       if(selectedOption === 'random_raffle'){
         body = {
@@ -203,7 +217,7 @@ import Link from "next/link";
         });
 
         if (response.ok) {
-          const tickets = await response.json()
+          const {tickets,receipt} = await response.json()
           try {
             const raffle_response = await fetch(`/api/raffles/${raffle._id}`, {
               method: "PATCH",
@@ -215,6 +229,7 @@ import Link from "next/link";
             });
             
             if (raffle_response.ok) {
+              setGeneratedReceipt(receipt);
               const { message, response_raffle } = await raffle_response.json();
               setMessage(`${tickets.length} tickets were bought succesfully`);
             } else {
@@ -296,27 +311,36 @@ import Link from "next/link";
             </div>
           )}
           
-  
-          <div className="flex-center m-1">
-          <Suspense fallback={<button>Enter Button</button>}>
-            <button className="raffle_btn" onClick={handleEnterRaffleButton} disabled={isExpired}>
-              Enter Raffle
-            </button>
-          </Suspense>
-            {session?.user.role === "Admin" && (
-              <div className='flex gap'>
-                <button className='raffle_btn' onClick={handleEdit}>Edit</button>
-                <button className='raffle_btn' onClick={handleDelete}> Delete</button>
+          {session ?(
+            <div>
+              <div className="flex-center m-1">
+                <Suspense fallback={<button>Enter Button</button>}>
+                  <button className="raffle_btn" onClick={(e) => handleEnterRaffleButton(e, session.user.id.toString())} disabled={isExpired}>
+                    Enter Raffle
+                  </button>
+                </Suspense>
+            
+                {session?.user.role === "Admin" && (
+                  <div className='flex gap'>
+                      <button className='raffle_btn' onClick={handleEdit}>Edit</button>
+                      <button className='raffle_btn' onClick={handleDelete}> Delete</button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="flex-center">
-            {message && (
-              <p className={message === 'There was a problem with buying the tickets' || message === "You already have that lucky number for this raffle" || message === "Sorry but Number has been picked by another user" ? "text-red-600" : "text-green-600"}>
-              {message}
-              </p>
-            )}
+              <div className="flex-center">
+                {message && (
+                    <p className={message === 'There was a problem with buying the tickets' || message === "You already have that lucky number for this raffle" || message === "Sorry but Number has been picked by another user" ? "text-red-600" : "text-green-600"}>
+                    {message}
+                    </p>
+                )}
+              </div>
             </div>
+          ): (
+            <div className="flex-center m-1">
+              <button onClick={openModal} className="raffle_btn">Enter as Guest</button>
+              <GuestsEnterRaffleModal isOpen={isOpen} onClose={closeModal} handleEnterRaffleButton={handleEnterRaffleButton} receipt={generatedReceipt} />
+            </div>
+          )}
         </footer>
       </div>
     );

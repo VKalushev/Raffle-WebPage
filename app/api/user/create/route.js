@@ -6,8 +6,23 @@ export const POST = async (request) => {
     try {
         await connectToDB()
         const { email, username, password } = await request.json();
+        if(!username) {
+            try {
+                let guestUser = undefined;
+                try {
+                    guestUser = await User.create({email: email});
+                } catch (error) {
+                    console.log(error)
+                }
+                return new Response(JSON.stringify(guestUser), { status: 201 });
+            }   catch (error) {
+                console.log(error)
+                return new Response("Failed to create new guest user", { status: 500 });
+            }
+        } 
         const emailUserExists = await User.findOne({ email });
         const userExists = await User.findOne({ username });
+        
         if (!userExists && !emailUserExists) {
             try {
                 const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,12 +35,12 @@ export const POST = async (request) => {
                 } catch (error) {
                     console.log(error)
                 }
-                
                 return new Response("User Successfully created", { status: 201 });
             }   catch (error) {
                 return new Response("Failed to create new user", { status: 500 });
             }
-        }
+        } 
+        console.log("Test 13")
         
         if(emailUserExists){
             return new Response(JSON.stringify('Email is already in use' ), { status: 400 });

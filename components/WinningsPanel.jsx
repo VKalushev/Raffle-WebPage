@@ -18,7 +18,7 @@ const WinningsPanel = ({user}) => {
                     userId: user._id,
                     receiptId: winning._id,
                 }),
-              });
+            });
 
             if(winnings_response.ok){
                 try {

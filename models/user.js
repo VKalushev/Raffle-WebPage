@@ -30,13 +30,12 @@ const ReceiptSchema = new Schema({
 const UserSchema = new Schema({
   email: {
     type: String,
-    unique: [true, 'Email already exists!'],
-    required: [true, 'Email is required!'],
+    default: "", // Set default value to an empty string
+    unique: false, // Allow multiple documents with an empty string
   },
   username: {
     type: String,
-    required: [true, 'Username is required!'],
-    unique: [true, 'Username already exists!'],
+    default: "guest",
     match: [/^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/, "Username invalid, it should contain 8-20 alphanumeric letters and be unique!"]
   },
   password: {
