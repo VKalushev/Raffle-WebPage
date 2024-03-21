@@ -40,7 +40,6 @@ export const POST = async (request) => {
                 return new Response("Failed to create new user", { status: 500 });
             }
         } 
-        console.log("Test 13")
         
         if(emailUserExists){
             return new Response(JSON.stringify('Email is already in use' ), { status: 400 });

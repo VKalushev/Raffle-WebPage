@@ -58,7 +58,6 @@ export const PATCH = async (request, { params }) => {
             }
             user.receipts.push(newReceipt)
             await user.save();
-            console.log(user)
             return new Response(JSON.stringify({tickets: newTickets, receipt: user.receipts[0]}), { status: 200 });
         } else {
             let isWinningReceiptFound = false;
@@ -72,8 +71,10 @@ export const PATCH = async (request, { params }) => {
                                 for (let j = 0; j < receipt.tickets.length; j++) {
                                     const currentTicketID = receipt.tickets[j]._id.toString();
                                     if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
+                                        console.log("ASAD")
                                         user.winning_receipts.push(receipt);
                                         winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                                        isWinningReceiptFound = true;
                                         break;
                                     }
                                 }
@@ -84,10 +85,18 @@ export const PATCH = async (request, { params }) => {
                     i -=1;
                 }
             }
+            
+            console.log("test")
+            console.log(isWinningReceiptFound)
+            if(user.username === "guest" && !isWinningReceiptFound){    
+                await user.save();
+                await User.findOneAndDelete({ _id: userId });
+                return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
+            } else {
+                await user.save();
+                return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
+            }
 
-            // console.log(winnerUserIDandTicket)
-            await user.save();
-            return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
 
     }
     } catch (error) {

@@ -9,17 +9,17 @@ const ClaimRewardsPage = () => {
 
   const handleClaim = async () => {
     try {
-      const response = await fetch('/api/claim-rewards', {
-        method: 'POST',
+      const response = await fetch('/api/winnings', {
+        method: 'PATCH',
         body: JSON.stringify({ receiptId }),
       });
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(data.message);
+        setMessage(data);
         setMessageColor('text-green-600');
       } else {
-        setMessage(data.message);
+        setMessage(data);
         setMessageColor('text-red-600');
       }
     } catch (error) {

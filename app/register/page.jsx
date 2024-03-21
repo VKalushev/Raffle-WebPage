@@ -30,12 +30,10 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Perform validation
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    // Your registration logic here
     try { 
       const response = await fetch("/api/user/create", {
         method: "POST",

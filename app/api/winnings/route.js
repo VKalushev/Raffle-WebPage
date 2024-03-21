@@ -32,21 +32,32 @@ export const PATCH = async (request, { params }) => {
 
     try {
         await connectToDB();
-        const winnings = await Winnings.findOne({receiptId: receiptId});
+        const winnings = await Winnings.findOne({receiptId: receiptId}).populate("userId");
         if (!winnings) {
             return new Response("No Winnings found", { status: 404 });
         }
-        if(winnings.userId.toString() === userId.toString()){
+
+        if(userId && !winnings.is_claimed){
+            if(winnings.userId.toString() === userId.toString()){
+                winnings.is_claimed = true;
+                winnings.save();
+                return new Response(JSON.stringify("Reward Claimed Successfully"), { status: 200 });
+            } else {
+                return new Response(JSON.stringify("The reward is not yours to claim"), { status: 500 });
+            }
+        } else if(winnings.userId.username.toString() === "guest" && !winnings.is_claimed){
             winnings.is_claimed = true;
             winnings.save();
-            return new Response(JSON.stringify("Winnings Claimed Successfully"), { status: 200 });
-        } else {
-            return new Response("To claim the reward login with the related account", { status: 500 });
+            return new Response(JSON.stringify("Reward Claimed Successfully"), { status: 200 });
+        } else if (winnings.is_claimed){
+            return new Response(JSON.stringify("Reward is claimed already"), { status: 500 });
+        } else{
+            return new Response(JSON.stringify("Error Claiming Reward"), { status: 500 });
         }
 
         
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating User", { status: 500 });
+        return new Response("Error Updating Winnings", { status: 500 });
     }
 };
