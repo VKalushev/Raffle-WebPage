@@ -52,41 +52,53 @@ export const PATCH = async (request, { params }) => {
 
             const newReceipt = {
                 raffleId: raffle._id,
+                winning_prize: raffle.winning_prize,
+                draw_date: raffle.draw_date,
                 tickets: newTickets
             }
             user.receipts.push(newReceipt)
             await user.save();
-            return new Response(JSON.stringify(newTickets), { status: 200 });
+            return new Response(JSON.stringify({tickets: newTickets, receipt: user.receipts[0]}), { status: 200 });
         } else {
+            let isWinningReceiptFound = false;
             for (let i = 0; i < user.receipts.length; i++) {
                 const receipt = user.receipts[i];
-     
                 if(receipt.raffleId.toString() === raffle._id.toString()){
-                    winnerUserIDandTicket.forEach(winningUser => {
-                        if(winningUser.userId.toString() === userId){
-                            user.winning_receipts = receipt;
-
-                        }
-
-                    });
-                    for (let i = 0; i < winnerUserIDandTicket.length; i++) {
-                        const currentWinner = winnerUserIDandTicket[i]
-                        if(currentWinner.userId.toString() === userId){
-                            user.winning_receipts = receipt;
-                            winnerUserIDandTicket[i] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                    if(!isWinningReceiptFound && winnerUserIDandTicket){
+                        for (let k = 0; k < winnerUserIDandTicket.length; k++) {
+                            const currentWinner = winnerUserIDandTicket[k]
+                            if(currentWinner.userId.toString() === userId){
+                                for (let j = 0; j < receipt.tickets.length; j++) {
+                                    const currentTicketID = receipt.tickets[j]._id.toString();
+                                    if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
+                                        console.log("ASAD")
+                                        user.winning_receipts.push(receipt);
+                                        winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
+                                        isWinningReceiptFound = true;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                     user.receipts.splice(i,1)
                     i -=1;
                 }
-                
             }
-            console.log(winnerUserIDandTicket)
-            await user.save();
-            return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
-        }
+            
+            console.log("test")
+            console.log(isWinningReceiptFound)
+            if(user.username === "guest" && !isWinningReceiptFound){    
+                await user.save();
+                await User.findOneAndDelete({ _id: userId });
+                return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
+            } else {
+                await user.save();
+                return new Response(JSON.stringify(winnerUserIDandTicket), { status: 200 });
+            }
 
 
+    }
     } catch (error) {
         console.log(error)
         return new Response("Error Updating User", { status: 500 });
