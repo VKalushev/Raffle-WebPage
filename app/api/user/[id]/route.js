@@ -23,7 +23,7 @@ export const PATCH = async (request, { params }) => {
         const user = await Winnings.findById(userId);
             
         if (!user) {
-            return new Response("User not found", { status: 404 });
+            return new Response(JSON.stringify("User not found"), { status: 404 });
         }
 
         if(email){
@@ -44,7 +44,7 @@ export const PATCH = async (request, { params }) => {
         
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating User", { status: 500 });
+        return new Response(JSON.stringify("Error Updating User"), { status: 500 });
     }
 };
 
@@ -54,11 +54,11 @@ export const DELETE = async (request, { params }) => {
         await connectToDB()
 
         const user = await User.findByIdAndDelete(userId)
-        if (!user) return new Response("User Not Found", { status: 404 });
+        if (!user) return new Response(JSON.stringify("User Not Found"), { status: 404 });
 
         return new Response(JSON.stringify(user), { status: 200 })
 
     } catch (error) {
-        return new Response("Internal Server Error", { status: 500 });
+        return new Response(JSON.stringify("Internal Server Error"), { status: 500 });
     }
 }

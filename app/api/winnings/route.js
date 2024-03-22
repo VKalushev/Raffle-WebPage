@@ -16,13 +16,13 @@ export const POST = async (request) => {
             });
         } catch (error) {
             console.log(error)
-            return new Response("Failed to create new winning claim", { status: 500 });
+            return new Response(JSON.stringify("Failed to create new winning claim"), { status: 500 });
         }
         
-        return new Response("Winning claim Successfully created", { status: 201 });
+        return new Response(JSON.stringify("Winning claim Successfully created"), { status: 201 });
     } catch (error) {
         console.log(error)
-        return new Response("Failed to create new winning claim", { status: 500 });
+        return new Response(JSON.stringify("Failed to create new winning claim"), { status: 500 });
     }
 }
 

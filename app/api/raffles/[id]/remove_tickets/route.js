@@ -35,6 +35,6 @@ export const PATCH = async (request, { params }) => {
         return new Response(JSON.stringify("There was a problem with userId or the tickets"), { status: 500 });
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating Prompt", { status: 500 });
+        return new Response(JSON.stringify("Error Updating Prompt"), { status: 500 });
     }
 };

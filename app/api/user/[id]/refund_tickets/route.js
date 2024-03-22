@@ -9,7 +9,7 @@ export const PATCH = async (request, { params }) => {
         const user = await User.findById(userId);
         
         if (!user) {
-            return new Response("User not found", { status: 404 });
+            return new Response(JSON.stringify("User not found"), { status: 404 });
         }
         let removedTickets = [];
         try{
@@ -41,6 +41,6 @@ export const PATCH = async (request, { params }) => {
         return new Response(JSON.stringify("The winning receipt was not found"), { status: 500 });
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating User", { status: 500 });
+        return new Response(JSON.stringify("Error Updating User"), { status: 500 });
     }
 };

@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 
 import User from '@models/user';
-import { connectToDB, getUserFromDatabase } from '@utils/database';
+import { connectToDB } from '@utils/database';
 
 const handler = NextAuth({
   providers: [

@@ -10,7 +10,7 @@ export const GET = async (request, { params }) => {
         return new Response(JSON.stringify(user), { status: 200 })
 
     } catch (error) {
-        console.log(user)
-        return new Response("Internal Server Error", { status: 500 });
+        console.log(error)
+        return new Response(JSON.stringify("Internal Server Error"), { status: 500 });
     }
 }
