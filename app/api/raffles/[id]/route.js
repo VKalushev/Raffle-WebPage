@@ -35,7 +35,7 @@ export const GET = async (request, { params }) => {
 } 
 
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date, isSharable} = await request.json();
+    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date, isSharable, owner} = await request.json();
 
     try {
         await connectToDB();
@@ -85,6 +85,9 @@ export const PATCH = async (request, { params }) => {
         }
         if(isSharable != undefined){
             raffle.is_sharable = isSharable;
+        }
+        if(owner){
+            raffle.owner = owner
         }
         
         try {

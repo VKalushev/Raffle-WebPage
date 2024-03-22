@@ -47,3 +47,18 @@ export const PATCH = async (request, { params }) => {
         return new Response("Error Updating User", { status: 500 });
     }
 };
+
+export const DELETE = async (request, { params }) => {
+    const {userId} = await request.json();
+    try {
+        await connectToDB()
+
+        const user = await User.findByIdAndDelete(userId)
+        if (!user) return new Response("User Not Found", { status: 404 });
+
+        return new Response(JSON.stringify(user), { status: 200 })
+
+    } catch (error) {
+        return new Response("Internal Server Error", { status: 500 });
+    }
+}

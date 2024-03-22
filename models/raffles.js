@@ -21,6 +21,15 @@ const RaffleSchema = new Schema({
     type: Number,
     default: 0,
   },
+  owner: { 
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  ownerName: {
+    type: String,
+    required: true
+  },
   winning_prize: {
     type: String,
     required: [true, 'Setting a prize is required.'],

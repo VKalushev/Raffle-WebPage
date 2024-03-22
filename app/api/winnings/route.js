@@ -48,9 +48,9 @@ export const PATCH = async (request, { params }) => {
         } else if(winnings.userId.username.toString() === "guest" && !winnings.is_claimed){
             winnings.is_claimed = true;
             winnings.save();
-            return new Response(JSON.stringify("Reward Claimed Successfully"), { status: 200 });
+            return new Response(JSON.stringify({message: "Reward Claimed Successfully", userId: winnings.userId._id}), { status: 200 });
         } else if (winnings.is_claimed){
-            return new Response(JSON.stringify("Reward is claimed already"), { status: 500 });
+            return new Response(JSON.stringify({message: "Reward is claimed already"}), { status: 500 });
         } else{
             return new Response(JSON.stringify("Error Claiming Reward"), { status: 500 });
         }

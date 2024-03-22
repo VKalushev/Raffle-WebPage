@@ -261,7 +261,9 @@ import GuestsEnterRaffleModal from "./GuestsEnterRaffleModal";
           </h3>
           </Suspense>
         </header>
-  
+        <div className="text-sm text-center border-b-2 border-b-black ml-5 mr-5 p-2">
+          <span className="p-2">Hosted by: {raffle.ownerName}</span>
+        </div>
         <div className="text-sm text-center border-b-2 border-b-black ml-5 mr-5 p-2">
           <span className="p-2">Tickets: {ticketsCount}</span>
           <span className="p-2">Participants: {participantsCount}</span>
@@ -320,7 +322,7 @@ import GuestsEnterRaffleModal from "./GuestsEnterRaffleModal";
                   </button>
                 </Suspense>
             
-                {session?.user.role === "Admin" && (
+                {session?.user.role === "Admin" || (session?.user.role === "Normal" && session?.user.id === raffle.owner) && (
                   <div className='flex gap'>
                       <button className='raffle_btn' onClick={handleEdit}>Edit</button>
                       <button className='raffle_btn' onClick={handleDelete}> Delete</button>
