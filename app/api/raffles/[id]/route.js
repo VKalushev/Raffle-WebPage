@@ -30,19 +30,19 @@ export const GET = async (request, { params }) => {
 
         return new Response(JSON.stringify({response_data: raffle}), { status: 200 })
     } catch (error) {
-        return new Response("Failed to fetch raffle by ID Failed", { status: 500 })
+        return new Response(JSON.stringify("Failed to fetch raffle by ID Failed"), { status: 500 })
     }
 } 
 
 export const PATCH = async (request, { params }) => {
-    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date, isSharable} = await request.json();
+    const { raffleId, userId, tickets, winning_prize, entry_price, draw_date, isSharable, owner} = await request.json();
 
     try {
         await connectToDB();
         const raffle = await Raffle.findById(raffleId);
 
         if (!raffle) {
-            return new Response("Raffle not found", { status: 404 });
+            return new Response(JSON.stringify("Raffle not found"), { status: 404 });
         }
         
         if(userId && tickets){
@@ -86,6 +86,9 @@ export const PATCH = async (request, { params }) => {
         if(isSharable != undefined){
             raffle.is_sharable = isSharable;
         }
+        if(owner){
+            raffle.owner = owner
+        }
         
         try {
             const response_raffle = raffle;
@@ -93,11 +96,11 @@ export const PATCH = async (request, { params }) => {
             return new Response(JSON.stringify({ message: "Successfully updated the Raffles", response_raffle: response_raffle }), { status: 200 });
         } catch (error) {
             console.log(error)
-            return new Response("Error Updating Prompt", { status: 500 });
+            return new Response(JSON.stringify("Error Updating Prompt"), { status: 500 });
         }
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating Prompt", { status: 500 });
+        return new Response(JSON.stringify("Error Updating Prompt"), { status: 500 });
     }
 };
 
@@ -117,6 +120,6 @@ export const DELETE = async (request, { params }) => {
         return new Response(JSON.stringify(uniqueUserIds), { status: 200 });
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating Prompt", { status: 500 });
+        return new Response(JSON.stringify("Error Updating Prompt"), { status: 500 });
     }
 };

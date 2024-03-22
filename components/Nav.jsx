@@ -34,6 +34,9 @@ const Nav = () => {
             <Link href='/claim-rewards' className="nav-links" >
                 <p>Redeem Rewards</p>
             </Link>
+            <Link href='/refund-receipt' className="nav-links" >
+                <p>Refund Receipt</p>
+            </Link>
             </div>
             
             {/* Desktop Navigation */}
