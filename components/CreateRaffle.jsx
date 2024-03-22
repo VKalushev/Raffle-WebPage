@@ -2,7 +2,7 @@ import RadioButton from "./RadioButton";
 
 import { useState } from "react";
 
-const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_holder, ticketPrice_place_holder, isSharable }) => {
+const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_holder, ticketPrice_place_holder, isSharable, session}) => {
     const [reward, setReward] = useState(reward_place_holder);
     const [time, setTime] = useState(time_place_holder);
     const [ticketPrice, setTicketPrice] = useState(ticketPrice_place_holder);
@@ -13,7 +13,7 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
 
     const handleConfirmClick = (e) => {
         e.preventDefault();
-        onConfirm(reward, time, ticketPrice, isShared);
+        onConfirm(reward, time, ticketPrice, isShared, session.user.id, session.user.name);
     };
 
     const handleCancelClick = () => {

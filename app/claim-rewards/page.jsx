@@ -13,13 +13,26 @@ const ClaimRewardsPage = () => {
         method: 'PATCH',
         body: JSON.stringify({ receiptId }),
       });
-      const data = await response.json();
-
+      const {message, userId} = await response.json();
+      console.log(message)
       if (response.ok) {
-        setMessage(data);
+        setMessage(message);
         setMessageColor('text-green-600');
+
+        if(userId){
+          const delete_guest_response = await fetch(`/api/user/${userId}`, {
+            method: "DELETE",
+            body: JSON.stringify({
+              userId: userId,
+            }),
+          });
+
+          if(delete_guest_response.ok){
+            console.log("Done");
+          }
+        }
       } else {
-        setMessage(data);
+        setMessage(message);
         setMessageColor('text-red-600');
       }
     } catch (error) {

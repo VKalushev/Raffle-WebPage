@@ -9,6 +9,6 @@ export const GET = async (request) => {
 
         return new Response(JSON.stringify(raffles), { status: 200 })
     } catch (error) {
-        return new Response("Failed to fetch all raffles failed", { status: 500 })
+        return new Response(JSON.stringify("Failed to fetch all raffles failed"), { status: 500 })
     }
 } 

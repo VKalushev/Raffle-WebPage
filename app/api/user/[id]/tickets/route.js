@@ -101,6 +101,6 @@ export const PATCH = async (request, { params }) => {
     }
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating User", { status: 500 });
+        return new Response(JSON.stringify("Error Updating User"), { status: 500 });
     }
 };

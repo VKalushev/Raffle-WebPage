@@ -7,13 +7,17 @@ import RaffleCardsList from "./RaffleCardsList";
 const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
   const [creatingRaffle, setCreatingRaffle] = useState(false);
   
-  const handleConfirmButton = async (reward, time, ticketPrice, isSharable) => {
+  const handleConfirmButton = async (reward, time, ticketPrice, isSharable,userId, ownerName) => {
+    console.log(userId)
+    console.log(ownerName)
     try { 
       const response = await fetch("/api/raffles/new", {
         method: "POST",
         body: JSON.stringify({
             reward: reward,
             time: time,
+            owner: userId,
+            ownerName: ownerName,
             ticketPrice: ticketPrice,
             isSharable: isSharable,
         }),
@@ -41,7 +45,7 @@ const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
 
   return (
     <section className='m-12'>
-      {archive === false && session?.user.role === 'Admin' && (
+      {archive === false && (session?.user.role === 'Admin' || session?.user.role === 'Normal') && (
           <div>
             {!creatingRaffle ? (
               <div className="new_raffle_button flex items-center justify-center text-9xl">
@@ -60,7 +64,8 @@ const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
                     reward_place_holder="Enter Prize"
                     time_place_holder=""
                     ticketPrice_place_holder={0}
-                    isSharable={false} />
+                    isSharable={false}
+                    session={session} />
                 )}
               </div>
             )}
@@ -70,7 +75,7 @@ const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
        {/* <div className="mb-20"><RaffleCard ></RaffleCard></div> */}
        { allRaffles.length > 0 &&(
         <div>
-        <RaffleCardsList data={allRaffles} onRaffleCardUpdate={fetchRaffles} createNewRaffle={handleConfirmButton} archive={archive}/>
+        <RaffleCardsList data={allRaffles} onRaffleCardUpdate={fetchRaffles} createNewRaffle={handleConfirmButton} archive={archive} />
         </div>
        )}
       

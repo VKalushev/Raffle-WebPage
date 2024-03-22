@@ -2,7 +2,7 @@ import Raffle from "@models/raffles";
 import { connectToDB } from "@utils/database";
 
 export const POST = async (request) => {
-    const { reward, time, ticketPrice, isSharable } = await request.json();
+    const { reward, time, ticketPrice, isSharable, owner, ownerName } = await request.json();
     
     try {
         await connectToDB()
@@ -10,6 +10,8 @@ export const POST = async (request) => {
 
             await Raffle.create({
                 winning_prize: reward,
+                owner: owner,
+                ownerName: ownerName,
                 draw_date: time,
                 entry_price: ticketPrice,
                 is_sharable: isSharable,

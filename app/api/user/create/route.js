@@ -17,7 +17,7 @@ export const POST = async (request) => {
                 return new Response(JSON.stringify(guestUser), { status: 201 });
             }   catch (error) {
                 console.log(error)
-                return new Response("Failed to create new guest user", { status: 500 });
+                return new Response(JSON.stringify("Failed to create new guest user"), { status: 500 });
             }
         } 
         const emailUserExists = await User.findOne({ email });
@@ -35,9 +35,9 @@ export const POST = async (request) => {
                 } catch (error) {
                     console.log(error)
                 }
-                return new Response("User Successfully created", { status: 201 });
+                return new Response(JSON.stringify("User Successfully created"), { status: 201 });
             }   catch (error) {
-                return new Response("Failed to create new user", { status: 500 });
+                return new Response(JSON.stringify("Failed to create new user"), { status: 500 });
             }
         } 
         
@@ -46,9 +46,9 @@ export const POST = async (request) => {
         } else if (userExists){
             return new Response(JSON.stringify('Username is already in use'), { status: 400 });
         } 
-        return new Response("Failed to create new user", { status: 500 });
+        return new Response(JSON.stringify("Failed to create new user"), { status: 500 });
     } catch (error) {
         console.log(error)
-        return new Response("Failed to create new user", { status: 500 });
+        return new Response(JSON.stringify("Failed to create new user"), { status: 500 });
     }
 }

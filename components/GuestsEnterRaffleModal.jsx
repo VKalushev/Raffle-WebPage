@@ -28,7 +28,7 @@ const GuestsEnterRaffleModal = ({ isOpen, onClose, handleEnterRaffleButton, rece
         <div className="modal-container bg-white w-96 p-6 rounded-lg shadow-lg z-50 relative">
           <button className="close-button absolute top-0 right-0 m-4" onClick={onClose}>X</button>
           <div className="modal-content">
-            <h2 className="text-2xl font-bold mb-4">Modal Content</h2>
+            <h2 className="text-2xl font-bold mb-4">Requred Information:</h2>
             <form onSubmit={createGuestUser}>
               <label htmlFor="guestEmail" className="text-lg">Enter your email:</label>
               <input 
