@@ -13,7 +13,7 @@ const Home = () => {
 
 
   const fetchRaffles = async () => {
-    const response = await fetch("/api/raffles");
+    const response = await fetch("/app/api/raffles");
     const data = await response.json();
     setAllRaffles(data);
   };
