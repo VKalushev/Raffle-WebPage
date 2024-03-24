@@ -22,7 +22,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchRaffles();
-    const intervalId = setInterval(fetchRaffles, 1000  );
+    const intervalId = setInterval(fetchRaffles, 10000  );
      
       return () => clearInterval(intervalId);
     }, []); 
