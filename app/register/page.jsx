@@ -33,28 +33,30 @@ const RegisterPage = () => {
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
-    }
-    try { 
-      const response = await fetch("/api/user/create", {
-        method: "POST",
-        body: JSON.stringify({
-            email: formData.email,
-            username: formData.username,
-            password: formData.password,
-        }),
-      });
-      
-      if (response.ok) {
-          router.push("/login");
-      } else {
-        const message = await response.json()
-        setError(message)
+    } else if (formData.username.length < 4 ){
+      setError('The username should be at least 4 characters long')
+      return;
+    } else {
+      try { 
+        const response = await fetch("/api/user/create", {
+          method: "POST",
+          body: JSON.stringify({
+              email: formData.email,
+              username: formData.username,
+              password: formData.password,
+          }),
+        });
+        
+        if (response.ok) {
+            router.push("/login");
+        } else {
+          const message = await response.json()
+          setError(message)
+        }
+      } catch (error) {
+          console.log(error);
       }
-    } catch (error) {
-        console.log(error);
     }
-    
-    // Once registered, you may want to redirect the user to a different page
   };
 
   return (

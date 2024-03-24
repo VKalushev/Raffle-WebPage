@@ -2,7 +2,7 @@
 
 import React,{ useState, useEffect } from "react";
 
-const RecentWinners = ({allRaffles, session}) => {
+const RecentWinners = ({ allRaffles, session }) => {
     const [winners, setWinners] = useState([]);
 
     const handleRecentWinners = () => {

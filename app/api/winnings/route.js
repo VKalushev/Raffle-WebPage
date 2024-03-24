@@ -36,9 +36,9 @@ export const PATCH = async (request, { params }) => {
         if (!winnings) {
             return new Response(JSON.stringify("No Winnings found"), { status: 404 });
         }
-
+        
         if(userId && !winnings.is_claimed){
-            if(winnings.userId.toString() === userId.toString()){
+            if(winnings.userId._id.toString() === userId.toString()){
                 winnings.is_claimed = true;
                 winnings.save();
                 return new Response(JSON.stringify("Reward Claimed Successfully"), { status: 200 });

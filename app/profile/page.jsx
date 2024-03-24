@@ -17,6 +17,7 @@ const MyProfile = () => {
     }
   };
 
+
   useEffect(() => {
     fetchUserData();
     }, [session]); 
@@ -30,8 +31,8 @@ const MyProfile = () => {
 
     {user != null &&(
       <div>
-        <WinningsPanel user={user}/>
-        <ReceiptsPanel user={user}/>
+        <WinningsPanel user={user} fetchUserData={fetchUserData}/>
+        <ReceiptsPanel user={user} fetchUserData={fetchUserData}/>
       </div>
     )}
 
