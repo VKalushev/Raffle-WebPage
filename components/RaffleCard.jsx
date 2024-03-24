@@ -8,7 +8,7 @@ import RadioButton from "./RadioButton";
 import NumberInput from "./NumberInputs";
 import Countdown from "./Countdown";
 import GuestsEnterRaffleModal from "./GuestsEnterRaffleModal";
-
+export const dynamic = 'force-dynamic'
 
   
   const RaffleCard = ({ raffle, onRaffleCardUpdate, onCreateNewRaffle, archive }) => {
