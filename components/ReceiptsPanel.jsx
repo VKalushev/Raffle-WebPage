@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState,useEffect } from 'react';
 
-const ReceiptsPanel = ({user}) => {
+const ReceiptsPanel = ({ user, fetchUserData }) => {
   const [refundAmounts, setRefundAmounts] = useState(user?.receipts.map(() => 1));
 
   const handleRefundAmountChange = (e, index) => {
@@ -37,6 +37,7 @@ const ReceiptsPanel = ({user}) => {
               }),
           });
           if(raffle_response.ok){
+            fetchUserData();
             console.log("Fine")
           }
         }

@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useState } from 'react';
 
-const WinningsPanel = ({user}) => {
+const WinningsPanel = ({ user, fetchUserData }) => {
     const [currentPage, setCurrentPage] = useState('unclaimed');
     
     const handlePageChange = (page) => {
@@ -29,6 +29,9 @@ const WinningsPanel = ({user}) => {
                             receiptId: winning._id,
                           }),
                       });
+                    if(response.ok){
+                        fetchUserData();
+                    }
               
                 } catch (error) {
                     console.log(error)
