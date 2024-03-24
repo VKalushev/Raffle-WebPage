@@ -16,6 +16,7 @@ const Home = () => {
     console.log("Fetching Raffles")
     const response = await fetch("/api/raffles");
     const data = await response.json();
+    console.log(data)
     setAllRaffles(data);
   };
 
