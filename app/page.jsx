@@ -4,6 +4,7 @@ import Raffles from '@components/Raffles';
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import RecentWinners from '@components/RecentWinners';
+export const dynamic = 'force-dynamic'
 
 
 
