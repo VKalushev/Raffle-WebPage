@@ -34,7 +34,7 @@ export const PATCH = async (request, { params }) => {
         await connectToDB();
         const winnings = await Winnings.findOne({receiptId: receiptId}).populate("userId");
         if (!winnings) {
-            return new Response("No Winnings found", { status: 404 });
+            return new Response(JSON.stringify("No Winnings found"), { status: 404 });
         }
 
         if(userId && !winnings.is_claimed){
@@ -58,6 +58,6 @@ export const PATCH = async (request, { params }) => {
         
     } catch (error) {
         console.log(error)
-        return new Response("Error Updating Winnings", { status: 500 });
+        return new Response(JSON.stringify("Error Updating Winnings"), { status: 500 });
     }
 };
