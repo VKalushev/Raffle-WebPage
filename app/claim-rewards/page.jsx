@@ -14,7 +14,6 @@ const ClaimRewardsPage = () => {
         body: JSON.stringify({ receiptId }),
       });
       const {message, userId} = await response.json();
-      console.log(message)
       if (response.ok) {
         setMessage(message);
         setMessageColor('text-green-600');

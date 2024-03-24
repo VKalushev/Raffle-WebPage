@@ -71,7 +71,6 @@ export const PATCH = async (request, { params }) => {
                                 for (let j = 0; j < receipt.tickets.length; j++) {
                                     const currentTicketID = receipt.tickets[j]._id.toString();
                                     if(currentTicketID === winnerUserIDandTicket[k].ticketId.toString()){
-                                        console.log("ASAD")
                                         user.winning_receipts.push(receipt);
                                         winnerUserIDandTicket[k] = {userId: currentWinner.userId, ticketId: currentWinner.ticketId, receiptId: receipt._id}
                                         isWinningReceiptFound = true;
@@ -86,8 +85,6 @@ export const PATCH = async (request, { params }) => {
                 }
             }
             
-            console.log("test")
-            console.log(isWinningReceiptFound)
             if(user.username === "guest" && !isWinningReceiptFound){    
                 await user.save();
                 await User.findOneAndDelete({ _id: userId });
