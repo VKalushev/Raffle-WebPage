@@ -1,4 +1,5 @@
 import RaffleCard from "./RaffleCard";
+export const dynamic = 'force-dynamic'
 
 const RaffleCardsList = ({ data, onRaffleCardUpdate, createNewRaffle, archive }) => {
   if (!data || data.length === 0) {

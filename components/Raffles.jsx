@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CreateRaffle from "./CreateRaffle";
 import RaffleCardsList from "./RaffleCardsList";
+export const dynamic = 'force-dynamic'
 
 const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
   const [creatingRaffle, setCreatingRaffle] = useState(false);
