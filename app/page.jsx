@@ -13,7 +13,14 @@ const Home = () => {
 
 
   const fetchRaffles = async () => {
-    const response = await fetch("/api/raffles");
+    const response = await fetch("/api/raffles", {
+      method: "GET", // Specify the HTTP method
+      headers: {
+        "Content-Type": "application/json", // Specify any headers you need
+        // Add any additional headers as needed
+      },
+      // You can include additional options such as body for POST requests, etc.
+    });
     const data = await response.json();
     setAllRaffles(data);
   };

@@ -2,12 +2,17 @@
 
 import WinningsPanel from "@components/WinningsPanel";
 import ReceiptsPanel from "@components/ReceiptsPanel";
+import { useRouter, redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const MyProfile = () => {
   const [user, setUser] = useState(null)
-  const { data: session } = useSession();  
+  const { data: session } = useSession();
+  const router = useRouter();
+  if(session){
+    redirect('/')
+  }
   
   const fetchUserData = async () => {
     if (session && session.user && session.user.id) {
@@ -17,6 +22,7 @@ const MyProfile = () => {
     }
   };
 
+  
 
   useEffect(() => {
     fetchUserData();
