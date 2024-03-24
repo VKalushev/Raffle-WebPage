@@ -131,8 +131,7 @@ import GuestsEnterRaffleModal from "./GuestsEnterRaffleModal";
           const raffleDrawDate = new Date(raffle.draw_date);
           const nextDay = new Date(raffleDrawDate);
           nextDay.setDate(raffleDrawDate.getDate() + 1);
-          onCreateNewRaffle(raffle.winning_prize,nextDay,raffle.entry_price,raffle.is_sharable);
-          // reward, time, ticketPrice, isSharable
+          onCreateNewRaffle(raffle.winning_prize,nextDay,raffle.entry_price,raffle.is_sharable,raffle.owner,raffle.ownerName);
         }
 
       } catch (error) {

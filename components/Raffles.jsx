@@ -8,8 +8,6 @@ const Raffles = ({allRaffles, fetchRaffles, session, archive}) => {
   const [creatingRaffle, setCreatingRaffle] = useState(false);
   
   const handleConfirmButton = async (reward, time, ticketPrice, isSharable,userId, ownerName) => {
-    console.log(userId)
-    console.log(ownerName)
     try { 
       const response = await fetch("/api/raffles/new", {
         method: "POST",
