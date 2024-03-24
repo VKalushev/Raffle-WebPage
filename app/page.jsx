@@ -13,6 +13,7 @@ const Home = () => {
 
 
   const fetchRaffles = async () => {
+    console.log("Fetching Raffles")
     const response = await fetch("/api/raffles");
     const data = await response.json();
     setAllRaffles(data);
