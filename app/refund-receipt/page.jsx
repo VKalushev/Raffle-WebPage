@@ -71,7 +71,7 @@ const RefundReceiptsPage = () => {
         });
 
         if(raffle_response.ok){
-          setReceiptLength(receiptLength - 1)
+          setReceiptLength(receiptLength - refundAmount)
           setMessage("Tickets refunded successfully.");
           setMessageColor('text-green-600');
         } else {
