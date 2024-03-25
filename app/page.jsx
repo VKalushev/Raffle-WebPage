@@ -15,8 +15,8 @@ const Home = () => {
 
   const fetchRaffles = async () => {
     const response = await fetch("/api/raffles", {
-      method: "PATCH",
-      cache: 'no-store',
+      method: "GET",
+      next: { revalidate: 10 },
     });
     const data = await response.json();
     setAllRaffles(data);
