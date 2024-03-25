@@ -13,6 +13,7 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
 
     const handleConfirmClick = (e) => {
         e.preventDefault();
+        console.log(session)
         onConfirm(reward, time, ticketPrice, isShared, session.user.id, session.user.name);
     };
 

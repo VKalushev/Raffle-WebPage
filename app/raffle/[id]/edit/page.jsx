@@ -2,13 +2,15 @@
 
 import CreateRaffle from "@components/CreateRaffle";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+
 
 const EditPage = () => {
   const searchParams = useSearchParams();
   const raffleParam = searchParams.get("raffle");
   const raffle = JSON.parse(raffleParam);
   const router = useRouter();
-
+  const { data: session } = useSession();
 
   const handleCancelCreateRaffle = () => {
     if (window.confirm("Are you sure you want to cancel edditing?")) {
@@ -55,7 +57,8 @@ const EditPage = () => {
         reward_place_holder={raffle.winning_prize}
         time_place_holder={raffle.draw_date.slice(0, -1)}
         ticketPrice_place_holder={parseInt(raffle.entry_price)}
-        isSharable={raffle.is_sharable} 
+        isSharable={raffle.is_sharable}
+        session={session}
         />
       </div>
     </div>
