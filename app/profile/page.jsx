@@ -10,7 +10,8 @@ const MyProfile = () => {
   const [user, setUser] = useState(null)
   const { data: session } = useSession();
   const router = useRouter();
-  if(session){
+  
+  if(!session){
     redirect('/')
   }
   
