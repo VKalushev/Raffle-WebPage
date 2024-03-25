@@ -321,7 +321,7 @@ export const dynamic = 'force-dynamic'
                   </button>
                 </Suspense>
             
-                {session?.user.role === "Admin" || (session?.user.role === "Normal" && session?.user.id === raffle.owner) && (
+                {session?.user.role === "Admin" || session?.user.id === raffle.owner && (
                   <div className='flex gap'>
                       <button className='raffle_btn' onClick={handleEdit}>Edit</button>
                       <button className='raffle_btn' onClick={handleDelete}> Delete</button>
