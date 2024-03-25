@@ -20,7 +20,7 @@ export const GET = async (request) => {
   }
 };
 
-export const PATCH = async (request, { params }) => {
+export const PATCH = async (request) => {
 
   try {
       await connectToDB();
