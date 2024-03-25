@@ -1,10 +1,19 @@
+#!/bin/bash
+
+# Update package lists
 sudo apt-get update
-sudo apt-get install -y nodejs npm
 
-sudo apt install curl
-curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash
-sudo apt-get install nodejs -y
+# Install required packages
+sudo apt-get install -y nodejs npm curl
 
-cd BeAWinner/
+# Install Node.js using NodeSource repository
+curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash -
+sudo apt remove libnode-dev
+sudo apt-get install -y nodejs
+
+# Install project dependencies
 npm install
+
+# Run the project
 npm run dev
+
