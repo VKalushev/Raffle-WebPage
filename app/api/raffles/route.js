@@ -19,3 +19,22 @@ export const GET = async (request) => {
     });
   }
 };
+
+export const PATCH = async (request, { params }) => {
+
+  try {
+      await connectToDB();
+      const raffles = await Raffles.find({});
+
+      return new Response(JSON.stringify(raffles), {
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store', // Prevents caching of the response
+        },
+      });
+  } catch (error) {
+      return new Response(JSON.stringify("Failed to fetch all raffles"), {
+        status: 500,
+      });
+    }
+  };
