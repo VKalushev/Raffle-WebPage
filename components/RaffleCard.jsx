@@ -62,10 +62,6 @@ export const dynamic = 'force-dynamic'
       setTicketCount(newValue);
     };
 
-    const handleOpenRafflePage = () => {
-      router.push(`/raffle/${raffle._id}`);
-    }
-
     const handleEdit = () => {
       router.push(`/raffle/${raffle._id}/edit?raffle=${JSON.stringify(raffle)}`);
     }
@@ -248,7 +244,7 @@ export const dynamic = 'force-dynamic'
   
     return (
       <div className="raffle_card">
-        <header className="raffle-header cursor-pointer" onClick={handleOpenRafflePage}>
+        <header className="raffle-header ">
           <div className="flex">
             <span className="reward-box">Prize: {raffle.winning_prize}</span>
             <span className="reward-box">Sharable: {raffle.is_sharable.toString()}</span>
