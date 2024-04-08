@@ -9,7 +9,10 @@ const CreateRaffle = ({ onCancel, onConfirm, reward_place_holder, time_place_hol
     const [isShared, setIsShared] = useState(isSharable);
 
 
-    const currentDateTime = new Date().toISOString().split("T")[0] + "T" + new Date().toTimeString().split(" ")[0];
+    const currentDate = new Date().toISOString().split("T")[0];
+    const currentTime = new Date().toTimeString().split(" ")[0];
+    const currentDateTime = currentDate + " " + currentTime;
+    console.log(currentDateTime)
 
     const handleConfirmClick = (e) => {
         e.preventDefault();
